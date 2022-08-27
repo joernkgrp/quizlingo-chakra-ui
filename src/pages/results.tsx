@@ -24,10 +24,10 @@ function GameAssessment(props) {
   if (props.finalScore == 5) {
     return <Text fontSize="lg">¡Fantástico! Besser geht es nicht mehr.</Text>;
   } else if (props.finalScore > 2) {
-    return <Text fontSize="lg">Das war schon richtig bonito!</Text>;
+    return <Text fontSize="lg">Das war schon richtig bueno.</Text>;
   } else {
     return (
-      <Text fontSize="lg">Beim nächsten Mal wird es bestimmt besser!</Text>
+      <Text fontSize="lg">Beim nächsten Mal wird es bestimmt besser.</Text>
     );
   }
 }
@@ -50,10 +50,6 @@ const Results = () => {
           Nächste To-do’s:
         </Heading>
         <List spacing={3}>
-          <ListItem>
-            <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Feedback zur Antwort während des Spiels (rote und grüne Boxen)
-          </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
             Fragen aus Backend laden

@@ -7,6 +7,7 @@ import {
   Divider,
   Flex,
   Spacer,
+  Progress,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -16,36 +17,22 @@ import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 import theme from "../theme";
 
-var finalScore = 0;
+var finalScore = 0; // Global variable to be exported
 
 const Game = () => {
-  const router = useRouter();
+  const router = useRouter(); // Go to next page
+
+  var maxSteps = questions.length; // Number of questions
+
+  // Define React hooks
   var [activeStep, setActiveStep] = React.useState(0);
   var [score, setScore] = useState(0);
-  var maxSteps = questions.length;
+  const [progress, setProgress] = React.useState(100);
 
-  const toast = useToast();
+  const toast = useToast(); // Define toast
 
-  function handleNext() {
-    setTimeout(() => {
-      if (activeStep < maxSteps - 1) {
-        setActiveStep(activeStep + 1);
-      }
-
-      if (activeStep == maxSteps - 1) {
-        finalScore = score;
-        router.push("/results");
-      }
-    }, 1000);
-  }
-
-  function handlePrevious() {
-    if (activeStep > 0) {
-      setActiveStep(activeStep - 1);
-    }
-  }
-
-  function ToastExample(correct: boolean) {
+  // Toast for correct and wrong given answer
+  function ToastResponse(correct: boolean) {
     if (correct) {
       toast({
         position: "bottom",
@@ -65,7 +52,53 @@ const Game = () => {
     }
   }
 
+  // Toast for timeout
+  function ToastTimeout() {
+    toast({
+      position: "bottom",
+      title: "Zeit schon abgelaufen!",
+      status: "error",
+      duration: 1000,
+      isClosable: false,
+    });
+  }
+
+  // Set timer to 10 sec
+  function startTimer() {
+    React.useEffect(() => {
+      const timer = setInterval(() => {
+        setProgress((oldProgress) => {
+          if (oldProgress < 0) {
+            return 0;
+          }
+          const diff = 0.1;
+          return Math.min(oldProgress - diff, 100);
+        });
+      }, 10);
+
+      return () => {
+        clearInterval(timer);
+      };
+    }, []);
+  }
+
+  // Go to next question
+  function handleNext(delay) {
+    setTimeout(() => {
+      if (activeStep < maxSteps - 1) {
+        setActiveStep(activeStep + 1);
+      }
+
+      if (activeStep == maxSteps - 1) {
+        finalScore = score;
+        router.push("/results");
+      }
+    }, delay);
+  }
+
+  // Check given answer
   function checkAnswer(clickedOption) {
+    setProgress(0);
     var correctOption = questions[activeStep].correctOption;
     var clickedOptionString = document.getElementById(clickedOption.toString());
     var correctOptionString = document.getElementById(correctOption.toString());
@@ -75,21 +108,33 @@ const Game = () => {
 
     setTimeout(() => {
       clickedOptionString.style.backgroundColor = theme.colors.gray[200];
-      correctOptionString.style.backgroundColor = theme.colors.gray[200];
       clickedOptionString.style.color = theme.colors.gray[800];
+
+      correctOptionString.style.backgroundColor = theme.colors.gray[200];
+
       correctOptionString.style.color = theme.colors.gray[800];
+      setProgress(100);
     }, 1000);
 
     if (clickedOption === correctOption) {
-      setScore((score += 1));
-      ToastExample(true);
+      if (progress < 0) {
+        ToastTimeout();
+      }
+      if (progress >= 0) {
+        setScore((score += 1));
+        ToastResponse(true);
+      }
     } else {
       clickedOptionString.style.backgroundColor = theme.colors.red[500];
       clickedOptionString.style.color = theme.colors.white;
-      ToastExample(false);
+
+      ToastResponse(false);
     }
-    handleNext();
+    handleNext(1000);
   }
+
+  // Start timer after loading page
+  startTimer();
 
   return (
     <Container>
@@ -125,6 +170,10 @@ const Game = () => {
             <Text fontSize={"lg"}>{option}</Text>
           </Box>
         ))}
+
+        <Box pt={4}>
+          <Progress value={progress} />
+        </Box>
 
         {/** <Button
           isDisabled={activeStep > 0 ? false : true}
