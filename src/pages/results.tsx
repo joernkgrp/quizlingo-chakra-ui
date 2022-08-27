@@ -1,5 +1,6 @@
 import {
   Button,
+  Box,
   Container,
   List,
   ListItem,
@@ -11,6 +12,8 @@ import {
   VStack,
   Spacer,
 } from "@chakra-ui/react";
+
+import { CheckCircleIcon } from "@chakra-ui/icons";
 
 import { useRouter } from "next/router";
 
@@ -24,18 +27,36 @@ const Results = () => {
   return (
     <Container>
       <Main>
-      <GradientHeading fontSize="3xl" title="Spiel beendet"/>
+        <GradientHeading fontSize="3xl" title="Spiel beendet" />
         <User name="Tom Bola" variant="left"></User>
+        <Spacer minH={8} />
 
-        <Text>Nächste To-dos:</Text>
-        <UnorderedList>
-          <ListItem>Punktestand korrekt anzeigen</ListItem>
-          <ListItem>Feedback zur Antwort während des Spiels</ListItem>
-          <ListItem>Fragen aus Backend laden</ListItem>
-          <ListItem>Timer anzeigen und Zeitdauer speichern</ListItem>
-          <ListItem>Punkte nach Zeitdauer speichern</ListItem>
-        </UnorderedList>
-       
+        <Heading as="h2" fontSize="lg">
+          Nächste To-do’s:
+        </Heading>
+        <List spacing={3}>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="orange.500" />
+            Punktestand korrekt anzeigen
+          </ListItem>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="orange.500" />
+            Feedback zur Antwort während des Spiels
+          </ListItem>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="orange.500" />
+            Fragen aus Backend laden
+          </ListItem>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="orange.500" />
+            Timer anzeigen und Zeitdauer speichern
+          </ListItem>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="orange.500" />
+            Punkte nach Zeitdauer speichern
+          </ListItem>
+        </List>
+
         <Button
           onClick={() => router.push("/")}
           size="lg"
