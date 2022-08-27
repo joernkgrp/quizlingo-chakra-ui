@@ -19,7 +19,6 @@ const Results = () => {
         </Heading>
         <User name="Tom Bola"></User>
         <Text>To do: Punktestand korrekt importieren</Text>
-        <Text>{score}</Text>
         <Button onClick={() => router.push("/")}>Home</Button>
       </VStack>
     </Container>
