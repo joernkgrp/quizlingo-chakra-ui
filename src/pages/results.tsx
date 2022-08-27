@@ -41,7 +41,7 @@ const Results = () => {
           </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Feedback zur Antwort während des Spiels (rot und grün)
+            Feedback zur Antwort während des Spiels (rote und grüne Boxen)
           </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
@@ -53,7 +53,7 @@ const Results = () => {
           </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Punkte abhöngig nach benötigter Zeit anzeigen
+            Punkte abhängig nach benötigter Zeit anzeigen
           </ListItem>
         </List>
 

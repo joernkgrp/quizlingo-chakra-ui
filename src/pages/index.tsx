@@ -23,8 +23,9 @@ const Index = () => {
         <GradientHeading fontSize="6xl" noOfLines={1} title="Quizlingo" />
 
         <Text color="text">
-          Spielerisch spanisch lernen mit <Code>Next.js</Code> +{" "}
-          <Code>chakra-ui</Code> + <Code>TypeScript</Code>.
+          Spanisch lernen im spielerischen Duell mit <br />
+          <Code>Next.js</Code> + <Code>chakra-ui</Code> +{" "}
+          <Code>TypeScript</Code>.
         </Text>
 
         <List spacing={3} my={0} color="text">
