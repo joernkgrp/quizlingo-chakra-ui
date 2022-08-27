@@ -76,18 +76,16 @@ const Game = () => {
     <Container>
       <Main>
         <Flex align={"center"}>
-          <Text>
-            {" "}
+          <Text fontSize="lg" fontWeight={"semibold"}>
             Pregunta {activeStep + 1} de {maxSteps}
           </Text>
           <Spacer />
           <User name="Tom Bola" variant="right" score={score}></User>
         </Flex>
 
-
         <Divider />
 
-        <Text>{questions[activeStep].taskText}</Text>
+        <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
 
         <GradientHeading
           fontSize="3xl"
@@ -103,7 +101,7 @@ const Game = () => {
             onClick={() => checkAnswer(answerIndex)}
             cursor="pointer"
           >
-            <Text>{option}</Text>
+            <Text fontSize={"lg"}>{option}</Text>
           </Box>
         ))}
 

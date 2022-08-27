@@ -18,7 +18,7 @@ export const User = ({
         <Avatar size="lg" name="Dan Abramov" src="https://bit.ly/dan-abramov" />
         <VStack spacing="0" align={"left"}>
           <Text fontSize="md">{name}</Text>
-          <Text fontSize="xl" as="b">
+          <Text fontSize="2xl" as="b">
             {score}
           </Text>
         </VStack>
@@ -26,15 +26,17 @@ export const User = ({
     </>
   ) : (
     <>
-      <HStack align={"center"}>
-        <VStack spacing="0" align={"end"}>
-          <Text fontSize="md">{name}</Text>
-          <Text fontSize="xl" as="b">
-            {score}
-          </Text>
-        </VStack>
-        <Avatar size="lg" name="Dan Abramov" src="https://bit.ly/dan-abramov" />
-      </HStack>
+      <Flex align={"center"}>
+        <Text fontSize="2xl" as="b">
+          {score}
+        </Text>
+        <Avatar
+          ml={2}
+          size="lg"
+          name="Dan Abramov"
+          src="https://bit.ly/dan-abramov"
+        />
+      </Flex>
     </>
   );
 };

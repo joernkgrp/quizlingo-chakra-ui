@@ -20,10 +20,10 @@ const Index = () => {
   return (
     <Container>
       <Main>
-        <GradientHeading fontSize='6xl' noOfLines={1} title="Quizlingo"/>
+        <GradientHeading fontSize="6xl" noOfLines={1} title="Quizlingo" />
 
         <Text color="text">
-          Spanish learning quiz made in <Code>Next.js</Code> +{" "}
+          Spielerisch spanisch lernen mit <Code>Next.js</Code> +{" "}
           <Code>chakra-ui</Code> + <Code>TypeScript</Code>.
         </Text>
 

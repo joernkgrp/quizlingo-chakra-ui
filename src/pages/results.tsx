@@ -37,11 +37,11 @@ const Results = () => {
         <List spacing={3}>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Punktestand korrekt anzeigen
+            Punktestand nach Spiel korrekt anzeigen
           </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Feedback zur Antwort während des Spiels
+            Feedback zur Antwort während des Spiels (rot und grün)
           </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
@@ -49,11 +49,11 @@ const Results = () => {
           </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Timer anzeigen und Zeitdauer speichern
+            Timer anzeigen
           </ListItem>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Punkte nach Zeitdauer speichern
+            Punkte abhöngig nach benötigter Zeit anzeigen
           </ListItem>
         </List>
 
@@ -65,7 +65,7 @@ const Results = () => {
           rounded="button"
           width="full"
         >
-          Home
+          Zur Startseite
         </Button>
       </Main>
     </Container>
