@@ -7,7 +7,7 @@ const questions = [
     questionText: "No existe … problema.",
     terms: ["problema", "ningún"],
     options: ["un", "de", "ninguna", "ningún"],
-    correctAnswer: 3,
+    correctOption: 3,
   },
   {
     category: "grammar",
@@ -30,7 +30,7 @@ const questions = [
       "organizado y inteligente.",
       "fuerte y abierto.",
     ],
-    correctAnswer: 1,
+    correctOption: 1,
     level: 1,
   },
   {
@@ -41,7 +41,7 @@ const questions = [
     questionText: "Satz 3",
     terms: ["terms"],
     options: ["Antwort 1", "Antwort 2 (korrekt)", "Antwort 3", "Antwort 4"],
-    correctAnswer: 1,
+    correctOption: 1,
   },
   {
     category: "grammar",
@@ -51,7 +51,7 @@ const questions = [
     questionText: "Satz 4",
     terms: ["terms"],
     options: ["Antwort 1 (korrekt)", "Antwort 2", "Antwort 3", "Antwort 4"],
-    correctAnswer: 0,
+    correctOption: 0,
   },
   {
     category: "grammar",
@@ -61,7 +61,7 @@ const questions = [
     questionText: "Satz 5",
     terms: ["terms"],
     options: ["Antwort 1", "Antwort 2", "Antwort 3 (korrekt)", "Antwort 4"],
-    correctAnswer: 2,
+    correctOption: 2,
   },
 ];
 

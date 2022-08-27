@@ -15,6 +15,8 @@ import { questions } from "../data/questions";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 
+var finalScore = 0;
+
 const Game = () => {
   const router = useRouter();
   var [activeStep, setActiveStep] = React.useState(0);
@@ -29,6 +31,7 @@ const Game = () => {
     }
 
     if (activeStep == maxSteps - 1) {
+      finalScore = score;
       router.push("/results");
     }
   }
@@ -59,16 +62,15 @@ const Game = () => {
     }
   }
 
-  function checkAnswer(answerIndex) {
-    var rightAnswer = questions[activeStep].correctAnswer;
+  function checkAnswer(clickedOption) {
+    var correctOption = questions[activeStep].correctOption;
 
-    if (answerIndex === rightAnswer) {
-      setScore(score + 1);
+    if (clickedOption === correctOption) {
+      setScore(score += 1);
       ToastExample(true);
     } else {
       ToastExample(false);
     }
-
     handleNext();
   }
 
@@ -92,13 +94,13 @@ const Game = () => {
           title={questions[activeStep].questionText}
         />
 
-        {questions[activeStep].options.map((option, answerIndex) => (
+        {questions[activeStep].options.map((option, optionIndex) => (
           <Box
             bgColor="gray.200"
             borderRadius="lg"
             p={4}
             _hover={{ bg: "gray.300" }}
-            onClick={() => checkAnswer(answerIndex)}
+            onClick={() => checkAnswer(optionIndex)}
             cursor="pointer"
           >
             <Text fontSize={"lg"}>{option}</Text>
@@ -120,3 +122,4 @@ const Game = () => {
 };
 
 export default Game;
+export { finalScore };

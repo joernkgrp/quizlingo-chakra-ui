@@ -5,12 +5,10 @@ import {
   List,
   ListItem,
   ListIcon,
-  OrderedList,
-  UnorderedList,
   Heading,
   Text,
-  VStack,
   Spacer,
+  Divider,
 } from "@chakra-ui/react";
 
 import { CheckCircleIcon } from "@chakra-ui/icons";
@@ -20,15 +18,32 @@ import { useRouter } from "next/router";
 import { Main } from "../components/Main";
 import { User } from "../components/User";
 import { GradientHeading } from "../components/GradientHeading";
-import score from "./game";
+import { finalScore } from "./game";
+
+function GameAssessment(props) {
+  if (props.finalScore == 5) {
+    return <Text fontSize="lg">¡Fantástico! Besser geht es nicht mehr.</Text>;
+  } else if (props.finalScore > 2) {
+    return <Text fontSize="lg">Das war schon richtig bonito!</Text>;
+  } else {
+    return (
+      <Text fontSize="lg">Beim nächsten Mal wird es bestimmt besser!</Text>
+    );
+  }
+}
 
 const Results = () => {
   const router = useRouter();
+
   return (
     <Container>
       <Main>
         <GradientHeading fontSize="3xl" title="Spiel beendet" />
-        <User name="Tom Bola" variant="left"></User>
+        <Divider />
+
+        <User name="Tom Bola" score={finalScore} variant="left"></User>
+        <GameAssessment finalScore={finalScore} />
+
         <Spacer minH={8} />
 
         <Heading as="h2" fontSize="lg">

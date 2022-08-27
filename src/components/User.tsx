@@ -17,7 +17,7 @@ export const User = ({
       <HStack align={"center"}>
         <Avatar size="lg" name="Dan Abramov" src="https://bit.ly/dan-abramov" />
         <VStack spacing="0" align={"left"}>
-          <Text fontSize="md">{name}</Text>
+          {/** <Text fontSize="md">{name}</Text> **/}
           <Text fontSize="2xl" as="b">
             {score}
           </Text>
