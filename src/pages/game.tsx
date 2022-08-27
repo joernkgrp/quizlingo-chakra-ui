@@ -14,7 +14,7 @@ import {
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { User } from "../components/User";
 import { questions } from "../data/questions";
-
+import { Main } from "../components/Main";
 
 const Game = () => {
   const router = useRouter();
@@ -50,7 +50,7 @@ const Game = () => {
 
   return (
     <Container>
-      <VStack spacing={6} my={6} align="stretch">
+      <Main>
         <Flex alignItems={"center"}>
           <User name="Tom Bola" score={score}></User>
           <Spacer />
@@ -90,10 +90,9 @@ const Game = () => {
         >
           Vorherige Frage
         </Button> **/}
-      </VStack>
+      </Main>
     </Container>
   );
 };
-
 
 export default Game;

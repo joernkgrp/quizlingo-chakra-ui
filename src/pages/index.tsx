@@ -1,30 +1,34 @@
 import {
+  Button,
   Link as ChakraLink,
+  Container,
+  Heading,
   Text,
   Code,
   List,
   ListIcon,
   ListItem,
+  Spacer,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
-
-import { Hero } from "../components/Hero";
-import { Container } from "../components/Container";
+import { useRouter } from "next/router";
 import { Main } from "../components/Main";
-import { DarkModeSwitch } from "../components/DarkModeSwitch";
-import { CTA } from "../components/CTA";
-import { Footer } from "../components/Footer";
-import { User } from "../components/User";
 
 const Index = () => {
+  const router = useRouter();
   return (
-    <Container height="100vh">
-      <Hero />
-
-      <Main>
+    <Container>
+      <Main height={"100vh"}>
+        <Heading
+          fontSize="6xl"
+          bgGradient="linear(to-r, spainFlag.red, spainFlag.yellow)"
+          bgClip="text"
+        >
+          Quizlingo
+        </Heading>
         <Text color="text">
-          Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{" "}
-          <Code>TypeScript</Code>.
+          Spanish learning quiz made in <Code>Next.js</Code> +{" "}
+          <Code>chakra-ui</Code> + <Code>TypeScript</Code>.
         </Text>
 
         <List spacing={3} my={0} color="text">
@@ -51,13 +55,18 @@ const Index = () => {
             </ChakraLink>
           </ListItem>
         </List>
+        <Spacer />
+        <Button
+          onClick={() => router.push("/game")}
+          size="lg"
+          variant="solid"
+          colorScheme="orange"
+          rounded="button"
+          width="full"
+        >
+          Spiel starten
+        </Button>
       </Main>
-
-      <DarkModeSwitch />
-      <Footer>
-        <User name="Tom Bola"></User>
-      </Footer>
-      <CTA />
     </Container>
   );
 };
