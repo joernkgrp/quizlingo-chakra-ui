@@ -22,7 +22,7 @@ const Results = () => {
   const router = useRouter();
   return (
     <Container>
-      <Main height={"100vh"}>
+      <Main>
         <Heading
           fontSize="3xl"
           bgGradient="linear(to-r, spainFlag.red, spainFlag.yellow)"
@@ -40,14 +40,13 @@ const Results = () => {
           <ListItem>Timer anzeigen und Zeitdauer speichern</ListItem>
           <ListItem>Punkte nach Zeitdauer speichern</ListItem>
         </UnorderedList>
-        <Spacer />
+       
         <Button
           onClick={() => router.push("/")}
           size="lg"
           variant="solid"
           colorScheme="orange"
           rounded="button"
-          mx={2}
           width="full"
         >
           Home

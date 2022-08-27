@@ -1,5 +1,6 @@
 import {
   Button,
+  Box,
   Link as ChakraLink,
   Container,
   Heading,
@@ -18,7 +19,7 @@ const Index = () => {
   const router = useRouter();
   return (
     <Container>
-      <Main height={"100vh"}>
+      <Main>
         <Heading
           fontSize="6xl"
           bgGradient="linear(to-r, spainFlag.red, spainFlag.yellow)"
@@ -55,7 +56,6 @@ const Index = () => {
             </ChakraLink>
           </ListItem>
         </List>
-        <Spacer />
         <Button
           onClick={() => router.push("/game")}
           size="lg"
