@@ -12,6 +12,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { GradientHeading } from "../components/GradientHeading";
 
 export default function SimpleCard() {
   return (
@@ -23,14 +24,7 @@ export default function SimpleCard() {
     >
       <Stack spacing={8} mx={"auto"} minW={"md"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Flex
-            justifyContent="top"
-            alignItems="center"
-            bgGradient="linear(to-l, heroGradientStart, heroGradientEnd)"
-            bgClip="text"
-          >
-            <Heading fontSize="4xl">Anmelden</Heading>
-          </Flex>
+          <GradientHeading fontSize="4xl" title="Anmelden"/>
           <Text fontSize={"lg"} color={"gray.600"}>
             Melde dich jetzt an, um mitzuspielen!
           </Text>

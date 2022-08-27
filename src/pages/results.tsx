@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 
 import { Main } from "../components/Main";
 import { User } from "../components/User";
+import { GradientHeading } from "../components/GradientHeading";
 import score from "./game";
 
 const Results = () => {
@@ -23,13 +24,7 @@ const Results = () => {
   return (
     <Container>
       <Main>
-        <Heading
-          fontSize="3xl"
-          bgGradient="linear(to-r, spainFlag.red, spainFlag.yellow)"
-          bgClip="text"
-        >
-          Spiel beendet
-        </Heading>
+      <GradientHeading fontSize="3xl" title="Spiel beendet"/>
         <User name="Tom Bola"></User>
 
         <Text>Nächste To-dos:</Text>

@@ -1,26 +1,19 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Heading,
-  Spacer,
-  VStack,
-  Text,
-} from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { Box, Container, Flex, Spacer, Text, useToast } from "@chakra-ui/react";
 import { User } from "../components/User";
 import { questions } from "../data/questions";
 import { Main } from "../components/Main";
+import { GradientHeading } from "../components/GradientHeading";
 
 const Game = () => {
   const router = useRouter();
   var [activeStep, setActiveStep] = React.useState(0);
   var [score, setScore] = useState(0);
   var maxSteps = questions.length;
+
+  const toast = useToast();
 
   function handleNext() {
     if (activeStep < maxSteps - 1) {
@@ -38,11 +31,34 @@ const Game = () => {
     }
   }
 
+  function ToastExample(correct: boolean) {
+    if (correct) {
+      toast({
+        position: "top-right",
+        title: "¡Correcto!",
+        status: "success",
+        duration: 2000,
+        isClosable: false,
+      });
+    } else {
+      toast({
+        position: "top-right",
+        title: "¡Incorrecto!",
+        status: "warning",
+        duration: 2000,
+        isClosable: false,
+      });
+    }
+  }
+
   function checkAnswer(answerIndex) {
     var rightAnswer = questions[activeStep].correctAnswer;
 
     if (answerIndex === rightAnswer) {
       setScore(score + 1);
+      ToastExample(true);
+    } else {
+      ToastExample(false);
     }
 
     handleNext();
@@ -51,27 +67,24 @@ const Game = () => {
   return (
     <Container>
       <Main>
-        <Flex alignItems={"center"}>
-          <User name="Tom Bola" score={score}></User>
+        <User name="Tom Bola" score={score}></User>
+
+        <Flex>
+          <Text>{questions[activeStep].taskText}</Text>
           <Spacer />
           <Text>
             Frage {activeStep + 1} von {maxSteps}
           </Text>
         </Flex>
-        <Text>{questions[activeStep].taskText}</Text>
-        <Heading
+        <GradientHeading
           fontSize="3xl"
-          bgGradient="linear(to-r, spainFlag.red, spainFlag.yellow)"
-          bgClip="text"
-        >
-          {questions[activeStep].questionText}
-        </Heading>
+          title={questions[activeStep].questionText}
+        />
 
         {questions[activeStep].options.map((option, answerIndex) => (
           <Box
-            alignItems={"top"}
             bgColor="gray.200"
-            borderRadius="md"
+            borderRadius="lg"
             p={4}
             _hover={{ bg: "gray.300" }}
             onClick={() => checkAnswer(answerIndex)}

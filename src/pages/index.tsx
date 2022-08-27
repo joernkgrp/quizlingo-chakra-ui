@@ -9,24 +9,19 @@ import {
   List,
   ListIcon,
   ListItem,
-  Spacer,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { Main } from "../components/Main";
+import { GradientHeading } from "../components/GradientHeading";
 
 const Index = () => {
   const router = useRouter();
   return (
     <Container>
       <Main>
-        <Heading
-          fontSize="6xl"
-          bgGradient="linear(to-r, spainFlag.red, spainFlag.yellow)"
-          bgClip="text"
-        >
-          Quizlingo
-        </Heading>
+        <GradientHeading fontSize='6xl' noOfLines={1} title="Quizlingo"/>
+
         <Text color="text">
           Spanish learning quiz made in <Code>Next.js</Code> +{" "}
           <Code>chakra-ui</Code> + <Code>TypeScript</Code>.

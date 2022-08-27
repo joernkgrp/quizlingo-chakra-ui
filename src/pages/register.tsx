@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { GradientHeading } from "../components/GradientHeading";
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,14 +30,7 @@ export default function SignupCard() {
     >
       <Stack spacing={8} mx={"auto"} minW={"md"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Flex
-            justifyContent="top"
-            alignItems="center"
-            bgGradient="linear(to-l, heroGradientStart, heroGradientEnd)"
-            bgClip="text"
-          >
-            <Heading fontSize="4xl">Registrieren</Heading>
-          </Flex>
+        <GradientHeading fontSize="4xl" title="Registrieren"/>
           <Text fontSize={"lg"} color={"gray.600"}>
             Lege jetzt ein Konto an, um mitzuspielen!
           </Text>
