@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 
-import { Box, Container, Flex, Spacer, Text, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Divider,
+  Flex,
+  Spacer,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { User } from "../components/User";
 import { questions } from "../data/questions";
 import { Main } from "../components/Main";
@@ -34,7 +42,7 @@ const Game = () => {
   function ToastExample(correct: boolean) {
     if (correct) {
       toast({
-        position: "top-right",
+        position: "bottom",
         title: "¡Correcto!",
         status: "success",
         duration: 2000,
@@ -42,7 +50,7 @@ const Game = () => {
       });
     } else {
       toast({
-        position: "top-right",
+        position: "bottom",
         title: "¡Incorrecto!",
         status: "warning",
         duration: 2000,
@@ -67,15 +75,20 @@ const Game = () => {
   return (
     <Container>
       <Main>
-        <User name="Tom Bola" score={score}></User>
-
-        <Flex>
-          <Text>{questions[activeStep].taskText}</Text>
-          <Spacer />
+        <Flex align={"center"}>
           <Text>
-            Frage {activeStep + 1} von {maxSteps}
+            {" "}
+            Pregunta {activeStep + 1} de {maxSteps}
           </Text>
+          <Spacer />
+          <User name="Tom Bola" variant="right" score={score}></User>
         </Flex>
+
+
+        <Divider />
+
+        <Text>{questions[activeStep].taskText}</Text>
+
         <GradientHeading
           fontSize="3xl"
           title={questions[activeStep].questionText}

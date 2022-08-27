@@ -25,7 +25,7 @@ const Results = () => {
     <Container>
       <Main>
       <GradientHeading fontSize="3xl" title="Spiel beendet"/>
-        <User name="Tom Bola"></User>
+        <User name="Tom Bola" variant="left"></User>
 
         <Text>Nächste To-dos:</Text>
         <UnorderedList>
