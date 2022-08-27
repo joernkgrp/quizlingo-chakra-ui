@@ -11,7 +11,7 @@ export const Container = (props: FlexProps) => (
       bg: 'gray.900',
       color: 'white',
     }}
-    transition="all 1s ease-out"
+    transition="all 0.15s ease-out"
     {...props}
   />
 )
