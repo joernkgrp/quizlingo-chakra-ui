@@ -14,6 +14,7 @@ import { User } from "../components/User";
 import { questions } from "../data/questions";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
+import theme from "../theme";
 
 var finalScore = 0;
 
@@ -26,14 +27,16 @@ const Game = () => {
   const toast = useToast();
 
   function handleNext() {
-    if (activeStep < maxSteps - 1) {
-      setActiveStep(activeStep + 1);
-    }
+    setTimeout(() => {
+      if (activeStep < maxSteps - 1) {
+        setActiveStep(activeStep + 1);
+      }
 
-    if (activeStep == maxSteps - 1) {
-      finalScore = score;
-      router.push("/results");
-    }
+      if (activeStep == maxSteps - 1) {
+        finalScore = score;
+        router.push("/results");
+      }
+    }, 1000);
   }
 
   function handlePrevious() {
@@ -48,15 +51,15 @@ const Game = () => {
         position: "bottom",
         title: "¡Correcto!",
         status: "success",
-        duration: 2000,
+        duration: 1000,
         isClosable: false,
       });
     } else {
       toast({
         position: "bottom",
         title: "¡Incorrecto!",
-        status: "warning",
-        duration: 2000,
+        status: "error",
+        duration: 1000,
         isClosable: false,
       });
     }
@@ -64,11 +67,25 @@ const Game = () => {
 
   function checkAnswer(clickedOption) {
     var correctOption = questions[activeStep].correctOption;
+    var clickedOptionString = document.getElementById(clickedOption.toString());
+    var correctOptionString = document.getElementById(correctOption.toString());
+
+    correctOptionString.style.backgroundColor = theme.colors.green[500];
+    correctOptionString.style.color = theme.colors.white;
+
+    setTimeout(() => {
+      clickedOptionString.style.backgroundColor = theme.colors.gray[200];
+      correctOptionString.style.backgroundColor = theme.colors.gray[200];
+      clickedOptionString.style.color = theme.colors.gray[800];
+      correctOptionString.style.color = theme.colors.gray[800];
+    }, 1000);
 
     if (clickedOption === correctOption) {
-      setScore(score += 1);
+      setScore((score += 1));
       ToastExample(true);
     } else {
+      clickedOptionString.style.backgroundColor = theme.colors.red[500];
+      clickedOptionString.style.color = theme.colors.white;
       ToastExample(false);
     }
     handleNext();
@@ -99,9 +116,11 @@ const Game = () => {
             bgColor="gray.200"
             borderRadius="lg"
             p={4}
-            _hover={{ bg: "gray.300" }}
+            id={optionIndex.toString()}
+            /** _hover={{ bg: "gray.300" }} **/
             onClick={() => checkAnswer(optionIndex)}
             cursor="pointer"
+            transition="0.2s ease-out"
           >
             <Text fontSize={"lg"}>{option}</Text>
           </Box>

@@ -18,7 +18,7 @@ import { GradientHeading } from "../components/GradientHeading";
 const Index = () => {
   const router = useRouter();
   return (
-    <Container>
+    <Container >
       <Main>
         <GradientHeading fontSize="6xl" noOfLines={1} title="Quizlingo" />
 
