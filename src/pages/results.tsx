@@ -52,10 +52,6 @@ const Results = () => {
         <List spacing={3}>
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Punktestand nach Spiel korrekt anzeigen
-          </ListItem>
-          <ListItem>
-            <ListIcon as={CheckCircleIcon} color="orange.500" />
             Feedback zur Antwort während des Spiels (rote und grüne Boxen)
           </ListItem>
           <ListItem>
