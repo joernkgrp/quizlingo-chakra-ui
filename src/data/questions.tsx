@@ -35,12 +35,12 @@ const questions = [
   },
   {
     category: "grammar",
-    level: 1,
-    type: "gap",
-    taskText: "Wie lautet der korrekte Satz?",
-    questionText: "Satz 3",
+    level: 2,
+    type: "tenses",
+    taskText: "Welche Zeitform verbirgt sich im folgenden Satz?",
+    questionText: "En 1989 tuvo lugar la reunificación alemana?",
     terms: ["terms"],
-    options: ["Antwort 1", "Antwort 2 (korrekt)", "Antwort 3", "Antwort 4"],
+    options: ["Imperfecto", "Indefinido", "Perfecto", "Futuro I"],
     correctOption: 1,
   },
   {
