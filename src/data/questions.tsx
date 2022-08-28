@@ -45,12 +45,12 @@ const questions = [
   },
   {
     category: "grammar",
-    level: 1,
-    type: "gap",
-    taskText: "Wie lautet der korrekte Satz?",
-    questionText: "Satz 4",
-    terms: ["terms"],
-    options: ["Antwort 1 (korrekt)", "Antwort 2", "Antwort 3", "Antwort 4"],
+    level: 2,
+    type: "tenses",
+    taskText: "Übersetze folgenden Satz ins Spanische:",
+    questionText: "Ich habe Antonio kennengelernt.",
+    terms: ["conocer a algn"],
+    options: ["Conocí a Antonio.", "Conocía a Antonio.", "Conoceré a Antonio.", "Conozco a Antonio"],
     correctOption: 0,
   },
   {
