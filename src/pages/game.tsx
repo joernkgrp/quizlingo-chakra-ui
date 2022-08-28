@@ -143,9 +143,12 @@ const Game = () => {
           <Text fontSize="lg" fontWeight={"semibold"}>
             Pregunta {activeStep + 1} de {maxSteps}
           </Text>
+
           <Spacer />
           <User name="Tom Bola" variant="right" score={score}></User>
         </Flex>
+
+        <Progress borderRadius={"lg"} value={progress} />
 
         <Divider />
 
@@ -170,10 +173,6 @@ const Game = () => {
             <Text fontSize={"lg"}>{option}</Text>
           </Box>
         ))}
-
-        <Box pt={4}>
-          <Progress value={progress} />
-        </Box>
 
         {/** <Button
           isDisabled={activeStep > 0 ? false : true}
