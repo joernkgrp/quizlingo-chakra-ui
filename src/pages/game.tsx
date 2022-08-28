@@ -71,7 +71,7 @@ const Game = () => {
           if (oldProgress < 0) {
             return 0;
           }
-          const diff = 0.2;
+          const diff = 0.1;
           var returnTime = Math.min(oldProgress - diff, 100);
           console.log(returnTime);
 
