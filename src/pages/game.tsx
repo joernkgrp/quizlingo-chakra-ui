@@ -71,8 +71,11 @@ const Game = () => {
           if (oldProgress < 0) {
             return 0;
           }
-          const diff = 0.1;
-          return Math.min(oldProgress - diff, 100);
+          const diff = 0.2;
+          var returnTime = Math.min(oldProgress - diff, 100);
+          console.log(returnTime);
+
+          return returnTime;
         });
       }, 10);
 
@@ -86,6 +89,7 @@ const Game = () => {
   function handleNext(delay) {
     setTimeout(() => {
       if (activeStep < maxSteps - 1) {
+        setProgress(100);
         setActiveStep(activeStep + 1);
       }
 
@@ -94,6 +98,23 @@ const Game = () => {
         router.push("/results");
       }
     }, delay);
+  }
+
+  // Show correct answer after timeout
+  function showCorrectAnswer() {
+    var correctOption = questions[activeStep].correctOption;
+    var correctOptionString = document.getElementById(correctOption.toString());
+
+    correctOptionString.style.backgroundColor = theme.colors.green[500];
+    correctOptionString.style.color = theme.colors.white;
+
+    setTimeout(() => {
+      correctOptionString.style.backgroundColor = theme.colors.gray[200];
+      correctOptionString.style.color = theme.colors.gray[800];
+      setProgress(100);
+    }, 1000);
+
+    handleNext(1000);
   }
 
   // Check given answer
@@ -109,18 +130,16 @@ const Game = () => {
     setTimeout(() => {
       clickedOptionString.style.backgroundColor = theme.colors.gray[200];
       clickedOptionString.style.color = theme.colors.gray[800];
-
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
-
       correctOptionString.style.color = theme.colors.gray[800];
       setProgress(100);
     }, 1000);
 
     if (clickedOption === correctOption) {
-      if (progress < 0) {
+      if (progress <= 0) {
         ToastTimeout();
       }
-      if (progress >= 0) {
+      if (progress > 0) {
         setScore((score += 1));
         ToastResponse(true);
       }

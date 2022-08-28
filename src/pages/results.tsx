@@ -54,10 +54,13 @@ const Results = () => {
             <ListIcon as={CheckCircleIcon} color="orange.500" />
             Fragen aus Backend laden
           </ListItem>
-         
           <ListItem>
             <ListIcon as={CheckCircleIcon} color="orange.500" />
             Punkte abhängig nach benötigter Zeit berechnen
+          </ListItem>
+          <ListItem>
+            <ListIcon as={CheckCircleIcon} color="orange.500" />
+            Login und Registrierung
           </ListItem>
         </List>
 
