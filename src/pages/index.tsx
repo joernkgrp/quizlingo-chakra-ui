@@ -14,6 +14,8 @@ import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
+import { MotionConfig } from "framer-motion";
+import { motion } from "framer-motion"
 
 const Index = () => {
   const router = useRouter();
@@ -53,7 +55,7 @@ const Index = () => {
           </ListItem>
         </List>
         <Button
-          onClick={() => router.push("/game")}
+          onClick={() => router.push("/load")}
           size="lg"
           variant="solid"
           colorScheme="orange"
