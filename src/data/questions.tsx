@@ -12,7 +12,7 @@ const questions = [
   {
     category: "grammar",
     type: "gap",
-    taskText: "Wie lautet der korrekte Satz?",
+    taskText: "Welcher Satz ist korrekt?",
     questionText: "Lola es una chica … ",
     terms: [
       "simpático",

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 
 import {
@@ -157,43 +158,48 @@ const Game = () => {
 
   return (
     <Container>
-      <Main>
-        <Flex align={"center"}>
-          <Text fontSize="lg" fontWeight={"semibold"}>
-            Pregunta {activeStep + 1} de {maxSteps}
-          </Text>
+      <motion.div
+        initial={{ opacity: 0, y:10 }}
+        animate={{ opacity: 1, y:0}}
+        transition={{duration:0.5}}
+      >
+        <Main>
+          <Flex align={"center"}>
+            <Text fontSize="lg" fontWeight={"semibold"}>
+              Pregunta {activeStep + 1} de {maxSteps}
+            </Text>
 
-          <Spacer />
-          <User name="Tom Bola" variant="right" score={score}></User>
-        </Flex>
+            <Spacer />
+            <User name="Tom Bola" variant="right" score={score}></User>
+          </Flex>
 
-        <Progress borderRadius={"lg"} value={progress} />
+          <Progress borderRadius={"lg"} value={progress} />
 
-        <Divider />
+          <Divider />
 
-        <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
+          <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
 
-        <GradientHeading
-          fontSize="3xl"
-          title={questions[activeStep].questionText}
-        />
+          <GradientHeading
+            fontSize="3xl"
+            title={questions[activeStep].questionText}
+          />
 
-        {questions[activeStep].options.map((option, optionIndex) => (
-          <Box
-            bgColor="gray.200"
-            borderRadius="lg"
-            p={4}
-            id={optionIndex.toString()}
-            /** _hover={{ bg: "gray.300" }} **/
-            onClick={() => checkAnswer(optionIndex)}
-            cursor="pointer"
-            transition="0.2s ease-out"
-          >
-            <Text fontSize={"lg"}>{option}</Text>
-          </Box>
-        ))}
+          {questions[activeStep].options.map((option, optionIndex) => (
+            <Box
+              bgColor="gray.200"
+              borderRadius="lg"
+              p={4}
+              id={optionIndex.toString()}
+              /** _hover={{ bg: "gray.300" }} **/
+              onClick={() => checkAnswer(optionIndex)}
+              cursor="pointer"
+              transition="0.2s ease-out"
+            >
+              <Text fontSize={"lg"}>{option}</Text>
+            </Box>
+          ))}
 
-        {/** <Button
+          {/** <Button
           isDisabled={activeStep > 0 ? false : true}
           leftIcon={<ArrowBackIcon />}
           colorScheme="orange"
@@ -202,7 +208,8 @@ const Game = () => {
         >
           Vorherige Frage
         </Button> **/}
-      </Main>
+        </Main>
+      </motion.div>
     </Container>
   );
 };

@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 import {
   Button,
   Box,
@@ -37,6 +39,11 @@ const Results = () => {
 
   return (
     <Container>
+      <motion.div
+        initial={{ opacity: 0, y:10 }}
+        animate={{ opacity: 1, y:0}}
+        transition={{duration:0.5}}
+      >
       <Main>
         <GradientHeading fontSize="3xl" title="Spiel beendet" />
         <Divider />
@@ -74,7 +81,7 @@ const Results = () => {
         >
           Zur Startseite
         </Button>
-      </Main>
+      </Main></motion.div>
     </Container>
   );
 };
