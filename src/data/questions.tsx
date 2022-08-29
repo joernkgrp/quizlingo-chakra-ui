@@ -40,7 +40,12 @@ const questions = [
     taskText: "Wie sagt man folgenden Satz auf Spanisch?",
     questionText: "Sie ist 72 Jahre alt.",
     terms: ["terms"],
-    options: ["Tengo setenta y dos años.", "Tiene setenta y dos años.", "Tiene setenta dos años.", "Tienes setenta dos años."],
+    options: [
+      "Tengo setenta y dos años.",
+      "Tiene setenta y dos años.",
+      "Tiene setenta dos años.",
+      "Tienes setenta dos años.",
+    ],
     correctOption: 1,
   },
   {
@@ -50,7 +55,12 @@ const questions = [
     taskText: "Wie sagt man folgenden Satz auf Spanisch?",
     questionText: "Wo ist unser Hotel?",
     terms: ["terms"],
-    options: ["¿Dónde está nuestro hotel?", "¿Aquí está nuestro hotel?", "¿Cuándo está nuestra hotel?", "¿Dónde es nuestro hotel?"],
+    options: [
+      "¿Dónde está nuestro hotel?",
+      "¿Aquí está nuestro hotel?",
+      "¿Cuándo está nuestra hotel?",
+      "¿Dónde es nuestro hotel?",
+    ],
     correctOption: 0,
   },
   {
@@ -60,7 +70,12 @@ const questions = [
     taskText: "Wie sagt man folgenden Satz auf Spanisch?",
     questionText: "Die Strecke geht über Sevilla.",
     terms: ["terms"],
-    options: ["La routa pasa par Sevilla.",  "La routa corre por Sevilla.", "La ruta pasa por Sevilla.", "La ruta corre para Sevilla."],
+    options: [
+      "La routa pasa par Sevilla.",
+      "La routa corre por Sevilla.",
+      "La ruta pasa por Sevilla.",
+      "La ruta corre para Sevilla.",
+    ],
     correctOption: 2,
   },
 ];
