@@ -64,28 +64,6 @@ const Game = () => {
     });
   }
 
-  // Set timer to 10 sec
-  function startTimer() {
-    React.useEffect(() => {
-      const timer = setInterval(() => {
-        setProgress((oldProgress) => {
-          if (oldProgress < 0) {
-            return 0;
-          }
-          const diff = 0.1;
-          var returnTime = Math.min(oldProgress - diff, 100);
-          console.log(returnTime);
-
-          return returnTime;
-        });
-      }, 10);
-
-      return () => {
-        clearInterval(timer);
-      };
-    }, []);
-  }
-
   // Go to next question
   function handleNext(delay) {
     setTimeout(() => {
@@ -103,6 +81,7 @@ const Game = () => {
 
   // Show correct answer after timeout
   function showCorrectAnswer() {
+    setProgress(0.1);
     var correctOption = questions[activeStep].correctOption;
     var correctOptionString = document.getElementById(correctOption.toString());
 
@@ -112,10 +91,8 @@ const Game = () => {
     setTimeout(() => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
-      setProgress(100);
-    }, 1000);
-
-    handleNext(1000);
+    }, 3000);
+    setProgress(100);
   }
 
   // Check given answer
@@ -153,15 +130,33 @@ const Game = () => {
     handleNext(1000);
   }
 
-  // Start timer after loading page
-  startTimer();
+  // Set timer to 10 sec
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((oldProgress) => {
+        if (oldProgress <= 0) {
+          return 0;
+        }
+        const diff = 10;
+        var returnTime = Math.min(oldProgress - diff, 100);
+        console.log(returnTime);
+
+        return returnTime;
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   return (
     <Container>
       <motion.div
-        initial={{ opacity: 0, y:10 }}
-        animate={{ opacity: 1, y:0}}
-        transition={{duration:0.5}}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
         <Main>
           <Flex align={"center"}>
@@ -173,7 +168,7 @@ const Game = () => {
             <User name="Tom Bola" variant="right" score={score}></User>
           </Flex>
 
-          <Progress borderRadius={"lg"} value={progress} />
+          <Progress borderRadius={"lg"} value={progress} colorScheme="orange" />
 
           <Divider />
 

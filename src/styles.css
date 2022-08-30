@@ -1,0 +1,22 @@
+.box {
+  position: absolute;
+  height: 16px;
+  border-radius: 16px;
+  background: orange;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.boxBackground {
+  position: relative;
+  height: 16px;
+  width: 100%;
+  border-radius: 16px;
+  background: #FEEBC8;
+  z-index: 0;
+}
+
+.wrapper {
+  position: relative;
+}
