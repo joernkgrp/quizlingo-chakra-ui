@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 
@@ -106,6 +106,7 @@ const Game = () => {
     correctOptionString.style.color = theme.colors.white;
 
     setTimeout(() => {
+      setCheck((check) => !check);
       clickedOptionString.style.backgroundColor = theme.colors.gray[200];
       clickedOptionString.style.color = theme.colors.gray[800];
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
@@ -128,28 +129,61 @@ const Game = () => {
       ToastResponse(false);
     }
     handleNext(1000);
+    setCheck((check) => !check);
+    setNewScale(1);
   }
 
   // Set timer to 10 sec
 
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress <= 0) {
-          return 0;
-        }
-        const diff = 10;
-        var returnTime = Math.min(oldProgress - diff, 100);
-        console.log(returnTime);
+  let timer;
+  const [check, setCheck] = useState(true);
+  const [newScale, setNewScale] = useState(1);
 
-        return returnTime;
-      });
+  const variants = {
+    open: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        y: { stiffness: 1000, velocity: -100 },
+      },
+    },
+    closed: {
+      y: 50,
+      opacity: 0,
+      transition: {
+        y: { stiffness: 1000 },
+      },
+    },
+  };
+
+  const updateCount = () => {
+    timer =
+      !timer &&
+      setInterval(() => {
+        if (activeStep == maxSteps - 1) {
+          router.push("/results");
+        } else {
+          setActiveStep((activeStep) => activeStep + 1);
+        }
+      }, 10000);
+
+    if (activeStep === maxSteps - 2) clearInterval(timer);
+  };
+
+  const updateWidth = () => {
+    setInterval(() => {
+      setNewScale((newScale) => newScale - 0.2);
     }, 1000);
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+    if (newScale === 0) clearInterval(timer);
+  };
+
+  useEffect(() => {
+    updateCount();
+    updateWidth();
+
+    return () => clearInterval(timer);
+  }, [activeStep]);
 
   return (
     <Container>
@@ -168,7 +202,16 @@ const Game = () => {
             <User name="Tom Bola" variant="right" score={score}></User>
           </Flex>
 
-          <Progress borderRadius={"lg"} value={progress} colorScheme="orange" />
+          <div className="wrapper">
+            <motion.div
+              style={{ originX: 0,}}
+              initial={{ width: "100%" }}
+              animate={{ width: "0%" }}
+              transition={{ duration: 10*5, ease: "linear"}}
+              className="box"
+            />
+            <motion.div animate={{ width: "100%" }} className="boxBackground" />
+          </div>
 
           <Divider />
 
