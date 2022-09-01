@@ -19,56 +19,23 @@ import { GradientHeading } from "../components/GradientHeading";
 import theme from "../theme";
 
 var finalScore = 0; // Global variable to be exported
+const delay = 1500; // Set delay to 1.5 s
+const answerTime = 10000;
 
 const Game = () => {
   const router = useRouter(); // Go to next page
+  const toast = useToast(); // Define toast
 
   var maxSteps = questions.length; // Number of questions
 
   // Define React hooks
   var [activeStep, setActiveStep] = React.useState(0);
   var [score, setScore] = useState(0);
-  const [progress, setProgress] = React.useState(100);
-
-  const toast = useToast(); // Define toast
-
-  // Toast for correct and wrong given answer
-  function ToastResponse(correct: boolean) {
-    if (correct) {
-      toast({
-        position: "bottom",
-        title: "¡Correcto!",
-        status: "success",
-        duration: 1000,
-        isClosable: false,
-      });
-    } else {
-      toast({
-        position: "bottom",
-        title: "¡Incorrecto!",
-        status: "error",
-        duration: 1000,
-        isClosable: false,
-      });
-    }
-  }
-
-  // Toast for timeout
-  function ToastTimeout() {
-    toast({
-      position: "bottom",
-      title: "Zeit schon abgelaufen!",
-      status: "error",
-      duration: 1000,
-      isClosable: false,
-    });
-  }
 
   // Go to next question
   function handleNext(delay) {
     setTimeout(() => {
       if (activeStep < maxSteps - 1) {
-        setProgress(100);
         setActiveStep(activeStep + 1);
       }
 
@@ -79,9 +46,20 @@ const Game = () => {
     }, delay);
   }
 
+  // Toast definition
+  function toastTimeout() {
+    toast({
+      position: "bottom",
+      title: "Zeit abgelaufen!",
+      status: "error",
+      duration: 1500,
+      isClosable: false,
+    });
+  }
+
   // Show correct answer after timeout
-  function showCorrectAnswer() {
-    setProgress(0.1);
+  function showCorrectAnswer(delay) {
+    toastTimeout();
     var correctOption = questions[activeStep].correctOption;
     var correctOptionString = document.getElementById(correctOption.toString());
 
@@ -91,96 +69,50 @@ const Game = () => {
     setTimeout(() => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
-    }, 3000);
-    setProgress(100);
+    }, delay);
+
+    handleNext(delay);
   }
 
   // Check given answer
   function checkAnswer(clickedOption) {
-    setProgress(0);
     var correctOption = questions[activeStep].correctOption;
     var clickedOptionString = document.getElementById(clickedOption.toString());
     var correctOptionString = document.getElementById(correctOption.toString());
 
+    // Change color to green for correct answer
     correctOptionString.style.backgroundColor = theme.colors.green[500];
     correctOptionString.style.color = theme.colors.white;
 
     setTimeout(() => {
-      setCheck((check) => !check);
       clickedOptionString.style.backgroundColor = theme.colors.gray[200];
       clickedOptionString.style.color = theme.colors.gray[800];
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
-      setProgress(100);
-    }, 1000);
+    }, delay);
 
     if (clickedOption === correctOption) {
-      if (progress <= 0) {
-        ToastTimeout();
-      }
-      if (progress > 0) {
-        setScore((score += 1));
-        ToastResponse(true);
-      }
+      setScore(score + 1);
     } else {
       clickedOptionString.style.backgroundColor = theme.colors.red[500];
       clickedOptionString.style.color = theme.colors.white;
-
-      ToastResponse(false);
     }
-    handleNext(1000);
-    setCheck((check) => !check);
-    setNewScale(1);
+    handleNext(delay);
   }
 
   // Set timer to 10 sec
-
   let timer;
-  const [check, setCheck] = useState(true);
-  const [newScale, setNewScale] = useState(1);
-
-  const variants = {
-    open: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        y: { stiffness: 1000, velocity: -100 },
-      },
-    },
-    closed: {
-      y: 50,
-      opacity: 0,
-      transition: {
-        y: { stiffness: 1000 },
-      },
-    },
-  };
 
   const updateCount = () => {
     timer =
       !timer &&
       setInterval(() => {
-        if (activeStep == maxSteps - 1) {
-          router.push("/results");
-        } else {
-          setActiveStep((activeStep) => activeStep + 1);
-        }
-      }, 10000);
-
-    if (activeStep === maxSteps - 2) clearInterval(timer);
-  };
-
-  const updateWidth = () => {
-    setInterval(() => {
-      setNewScale((newScale) => newScale - 0.2);
-    }, 1000);
-
-    if (newScale === 0) clearInterval(timer);
+        showCorrectAnswer(delay);
+      }, answerTime);
   };
 
   useEffect(() => {
     updateCount();
-    updateWidth();
 
     return () => clearInterval(timer);
   }, [activeStep]);
@@ -199,15 +131,16 @@ const Game = () => {
             </Text>
 
             <Spacer />
+
             <User name="Tom Bola" variant="right" score={score}></User>
           </Flex>
 
           <div className="wrapper">
             <motion.div
-              style={{ originX: 0,}}
+              style={{ originX: 0 }}
               initial={{ width: "100%" }}
               animate={{ width: "0%" }}
-              transition={{ duration: 10*5, ease: "linear"}}
+              transition={{ duration: (answerTime / 1000) * 5, ease: "linear" }}
               className="box"
             />
             <motion.div animate={{ width: "100%" }} className="boxBackground" />
@@ -231,21 +164,11 @@ const Game = () => {
               /** _hover={{ bg: "gray.300" }} **/
               onClick={() => checkAnswer(optionIndex)}
               cursor="pointer"
-              transition="0.2s ease-out"
+              transition="0.25s ease-out"
             >
               <Text fontSize={"lg"}>{option}</Text>
             </Box>
           ))}
-
-          {/** <Button
-          isDisabled={activeStep > 0 ? false : true}
-          leftIcon={<ArrowBackIcon />}
-          colorScheme="orange"
-          variant="outline"
-          onClick={handlePrevious}
-        >
-          Vorherige Frage
-        </Button> **/}
         </Main>
       </motion.div>
     </Container>

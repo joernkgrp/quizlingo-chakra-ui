@@ -38,7 +38,7 @@ function Load() {
   return (
     <Stack height={"100vh"} alignItems={"center"} justifyContent="center">
       <motion.div
-        animate={{ opacity: [0, 1, 1, 0, 1, 1, 0], scale: [0.9, 1, 1, 0.9, 1, 1, 0.9] }}
+        animate={{ opacity: [0, 1, 1, 0], scale: [0.9, 1, 1, 0.9] }}
         transition={{ duration: animationTime, ease: "easeOut" }}
       >
         <Flex
