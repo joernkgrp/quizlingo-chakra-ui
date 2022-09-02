@@ -7,8 +7,8 @@ import {
   Container,
   Divider,
   Flex,
-  Spacer,
   Progress,
+  Spacer,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -18,11 +18,14 @@ import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 import theme from "../theme";
 
-var finalScore = 0; // Global variable to be exported
-const delay = 1500; // Set delay to 1.5 s
-const answerTime = 10000;
+// Global variables to be exported
+var finalScore = 0;
 
 const Game = () => {
+  const delay = 1500;
+  const answerTime = 4000;
+  const initialProgress = 90;
+
   const router = useRouter(); // Go to next page
   const toast = useToast(); // Define toast
 
@@ -31,6 +34,7 @@ const Game = () => {
   // Define React hooks
   var [activeStep, setActiveStep] = React.useState(0);
   var [score, setScore] = useState(0);
+  var [progress, setProgress] = useState(90);
 
   // Go to next question
   function handleNext(delay) {
@@ -43,6 +47,9 @@ const Game = () => {
         finalScore = score;
         router.push("/results");
       }
+
+      setProgress(initialProgress);
+      console.log(progress);
     }, delay);
   }
 
@@ -52,30 +59,31 @@ const Game = () => {
       position: "bottom",
       title: "Zeit abgelaufen!",
       status: "error",
-      duration: 1500,
+      duration: delay,
       isClosable: false,
     });
   }
 
   // Show correct answer after timeout
   function showCorrectAnswer(delay) {
-    toastTimeout();
     var correctOption = questions[activeStep].correctOption;
     var correctOptionString = document.getElementById(correctOption.toString());
 
+    toastTimeout();
     correctOptionString.style.backgroundColor = theme.colors.green[500];
     correctOptionString.style.color = theme.colors.white;
 
     setTimeout(() => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
-    }, delay);
 
-    handleNext(delay);
+      handleNext(delay);
+    }, delay);
   }
 
-  // Check given answer
-  function checkAnswer(clickedOption) {
+  // Check given response
+  function checkResponse(clickedOption) {
+    setProgress(0);
     var correctOption = questions[activeStep].correctOption;
     var clickedOptionString = document.getElementById(clickedOption.toString());
     var correctOptionString = document.getElementById(correctOption.toString());
@@ -89,6 +97,7 @@ const Game = () => {
       clickedOptionString.style.color = theme.colors.gray[800];
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
+      handleNext(0);
     }, delay);
 
     if (clickedOption === correctOption) {
@@ -97,11 +106,11 @@ const Game = () => {
       clickedOptionString.style.backgroundColor = theme.colors.red[500];
       clickedOptionString.style.color = theme.colors.white;
     }
-    handleNext(delay);
   }
 
   // Set timer to 10 sec
   let timer;
+  let timer2;
 
   const updateCount = () => {
     timer =
@@ -111,66 +120,70 @@ const Game = () => {
       }, answerTime);
   };
 
+  const progressBar = () => {
+    timer2 =
+      !timer2 &&
+      setInterval(() => {
+        setProgress(progress - 1);
+      }, answerTime / 100);
+  };
+
   useEffect(() => {
     updateCount();
 
     return () => clearInterval(timer);
   }, [activeStep]);
 
+  useEffect(() => {
+    progressBar();
+
+    return () => clearInterval(timer2);
+  }, [progress]);
+
   return (
     <Container>
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Main>
-          <Flex align={"center"}>
-            <Text fontSize="lg" fontWeight={"semibold"}>
-              Pregunta {activeStep + 1} de {maxSteps}
-            </Text>
+      <Main>
+        <Flex align={"center"}>
+          <Text fontSize="lg" fontWeight={"semibold"}>
+            Pregunta {activeStep + 1} de {maxSteps}
+          </Text>
 
-            <Spacer />
+          <Spacer />
 
-            <User name="Tom Bola" variant="right" score={score}></User>
-          </Flex>
+          <User name="Tom Bola" variant="right" score={score}></User>
+        </Flex>
 
-          <div className="wrapper">
-            <motion.div
-              style={{ originX: 0 }}
-              initial={{ width: "100%" }}
-              animate={{ width: "0%" }}
-              transition={{ duration: (answerTime / 1000) * 5, ease: "linear" }}
-              className="box"
-            />
-            <motion.div animate={{ width: "100%" }} className="boxBackground" />
-          </div>
+        <Progress
+          colorScheme={"orange"}
+          borderRadius="lg"
+          size="lg"
+          value={progress}
+        ></Progress>
 
-          <Divider />
+        <Divider />
 
-          <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
+        <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
 
-          <GradientHeading
-            fontSize="3xl"
-            title={questions[activeStep].questionText}
-          />
+        <GradientHeading
+          fontSize="3xl"
+          title={questions[activeStep].questionText}
+        />
 
-          {questions[activeStep].options.map((option, optionIndex) => (
-            <Box
-              bgColor="gray.200"
-              borderRadius="lg"
-              p={4}
-              id={optionIndex.toString()}
-              /** _hover={{ bg: "gray.300" }} **/
-              onClick={() => checkAnswer(optionIndex)}
-              cursor="pointer"
-              transition="0.25s ease-out"
-            >
-              <Text fontSize={"lg"}>{option}</Text>
-            </Box>
-          ))}
-        </Main>
-      </motion.div>
+        {questions[activeStep].options.map((option, optionIndex) => (
+          <Box
+            bgColor="gray.200"
+            borderRadius="lg"
+            p={4}
+            id={optionIndex.toString()}
+            /** _hover={{ bg: "gray.300" }} **/
+            onClick={() => checkResponse(optionIndex)}
+            cursor="pointer"
+            transition="0.25s ease-out"
+          >
+            <Text fontSize={"lg"}>{option}</Text>
+          </Box>
+        ))}
+      </Main>
     </Container>
   );
 };
