@@ -28,9 +28,8 @@ export default function SignupCard() {
     >
       <Stack spacing={8} mx={"auto"} minW={"md"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Box align="center" width={"100%"}>
-            <GradientHeading fontSize="4xl" title="Registrieren" />
-          </Box>
+          <GradientHeading fontSize="4xl" title="Registrieren" />
+
           <Text fontSize={"lg"} color={"gray.600"}>
             Lege jetzt ein Konto an, um mitzuspielen!
           </Text>
