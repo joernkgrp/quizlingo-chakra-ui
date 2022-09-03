@@ -30,7 +30,9 @@ export default function SignupCard() {
     >
       <Stack spacing={8} mx={"auto"} minW={"md"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-        <GradientHeading fontSize="4xl" title="Registrieren"/>
+          <Box align="center" width={"100%"}>
+            <GradientHeading fontSize="4xl" title="Registrieren" />
+          </Box>
           <Text fontSize={"lg"} color={"gray.600"}>
             Lege jetzt ein Konto an, um mitzuspielen!
           </Text>
@@ -47,7 +49,7 @@ export default function SignupCard() {
               <Input type="text" />
             </FormControl>
 
-            <FormControl id="firstName">
+            <FormControl id="firstName" isRequired>
               <FormLabel>Vorname</FormLabel>
               <Input type="text" />
             </FormControl>
@@ -76,8 +78,7 @@ export default function SignupCard() {
               <Button
                 loadingText="Submitting"
                 size={"lg"}
-                bg={"blue.400"}
-                color={"white"}
+                colorScheme="orange"
                 _hover={{
                   bg: "blue.500",
                 }}
@@ -87,7 +88,7 @@ export default function SignupCard() {
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                Bereits ein Konto? <Link color={"blue.400"}>Einloggen</Link>
+                Bereits ein Konto? <Link color={"orange.500"}>Einloggen</Link>
               </Text>
             </Stack>
           </Stack>

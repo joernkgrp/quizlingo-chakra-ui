@@ -22,7 +22,7 @@ import theme from "../theme";
 var finalScore = 0;
 
 const Game = () => {
-  const delay = 1500;
+  const delay = 1000;
   const answerTime = 10000;
   const initialProgress = 100;
   const timerRefresh = 1000;
@@ -46,11 +46,11 @@ const Game = () => {
 
       if (activeStep == maxSteps - 1) {
         finalScore = score;
+        console.log(score);
         router.push("/results");
       }
 
       setProgress(initialProgress);
-      console.log(progress);
     }, delay);
   }
 
@@ -85,6 +85,7 @@ const Game = () => {
   // Check given response
   function checkResponse(clickedOption) {
     setProgress(0);
+
     var correctOption = questions[activeStep].correctOption;
     var clickedOptionString = document.getElementById(clickedOption.toString());
     var correctOptionString = document.getElementById(correctOption.toString());
@@ -98,11 +99,13 @@ const Game = () => {
       clickedOptionString.style.color = theme.colors.gray[800];
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
+
       handleNext(0);
     }, delay);
 
     if (clickedOption === correctOption) {
-      setScore(score + 1);
+      setScore((score += 1));
+      console.log(score);
     } else {
       clickedOptionString.style.backgroundColor = theme.colors.red[500];
       clickedOptionString.style.color = theme.colors.white;
