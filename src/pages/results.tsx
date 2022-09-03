@@ -40,48 +40,31 @@ const Results = () => {
   return (
     <Container>
       <motion.div
-        initial={{ opacity: 0, y:10 }}
-        animate={{ opacity: 1, y:0}}
-        transition={{duration:0.5}}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-      <Main>
-        <GradientHeading fontSize="3xl" title="Spiel beendet" />
-        <Divider />
+        <Main>
+          <GradientHeading fontSize="3xl" title="Spiel beendet" />
+          <Divider />
 
-        <User name="Tom Bola" score={finalScore} variant="left"></User>
-        <GameAssessment finalScore={finalScore} />
+          <User name="Tom Bola" score={finalScore} variant="left"></User>
+          <GameAssessment finalScore={finalScore} />
 
-        <Spacer minH={8} />
+          <Spacer minH={8} />
 
-        <Heading as="h2" fontSize="lg">
-          Nächste To-do’s:
-        </Heading>
-        <List spacing={3}>
-          <ListItem>
-            <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Fragen aus Backend laden
-          </ListItem>
-          <ListItem>
-            <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Punkte abhängig nach benötigter Zeit berechnen
-          </ListItem>
-          <ListItem>
-            <ListIcon as={CheckCircleIcon} color="orange.500" />
-            Login und Registrierung
-          </ListItem>
-        </List>
-
-        <Button
-          onClick={() => router.push("/")}
-          size="lg"
-          variant="solid"
-          colorScheme="orange"
-          rounded="button"
-          width="full"
-        >
-          Zur Startseite
-        </Button>
-      </Main></motion.div>
+          <Button
+            onClick={() => router.push("/")}
+            size="lg"
+            variant="solid"
+            colorScheme="orange"
+            rounded="button"
+            width="full"
+          >
+            Zur Startseite
+          </Button>
+        </Main>
+      </motion.div>
     </Container>
   );
 };

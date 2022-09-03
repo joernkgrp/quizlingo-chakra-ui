@@ -23,8 +23,9 @@ var finalScore = 0;
 
 const Game = () => {
   const delay = 1500;
-  const answerTime = 4000;
-  const initialProgress = 90;
+  const answerTime = 10000;
+  const initialProgress = 100;
+  const timerRefresh = 1000;
 
   const router = useRouter(); // Go to next page
   const toast = useToast(); // Define toast
@@ -34,7 +35,7 @@ const Game = () => {
   // Define React hooks
   var [activeStep, setActiveStep] = React.useState(0);
   var [score, setScore] = useState(0);
-  var [progress, setProgress] = useState(90);
+  var [progress, setProgress] = useState(initialProgress);
 
   // Go to next question
   function handleNext(delay) {
@@ -124,8 +125,8 @@ const Game = () => {
     timer2 =
       !timer2 &&
       setInterval(() => {
-        setProgress(progress - 1);
-      }, answerTime / 100);
+        setProgress((progress) => progress - answerTime / timerRefresh);
+      }, timerRefresh);
   };
 
   useEffect(() => {
