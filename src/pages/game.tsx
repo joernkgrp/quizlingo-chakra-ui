@@ -128,7 +128,7 @@ const Game = () => {
     timer2 =
       !timer2 &&
       setInterval(() => {
-        setProgress((progress) => progress - answerTime / timerRefresh);
+        setProgress((progress) => progress - answerTime / timerRefresh - 1);
       }, timerRefresh);
   };
 
@@ -157,12 +157,15 @@ const Game = () => {
           <User name="Tom Bola" variant="right" score={score}></User>
         </Flex>
 
-        <Progress
-          colorScheme={"orange"}
-          borderRadius="lg"
-          size="lg"
-          value={progress}
-        ></Progress>
+        <div className="wrapper">
+          <motion.div
+            style={{ originX: 0 }}
+            animate={{ width: progress + "%" }}
+            transition={{ ease: "easeInOut" }}
+            className="box"
+          />
+          <motion.div animate={{ width: "100%" }} className="boxBackground" />
+        </div>
 
         <Divider />
 
