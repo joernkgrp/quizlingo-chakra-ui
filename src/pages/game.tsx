@@ -100,7 +100,7 @@ const Game = () => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
 
-      handleNext(0);
+      handleNext(delay);
     }, delay);
 
     if (clickedOption === correctOption) {
