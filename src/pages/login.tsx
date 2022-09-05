@@ -1,77 +1,58 @@
-import {
-  Flex,
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Checkbox,
-  Stack,
-  Link,
-  Button,
-  Heading,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import { GradientHeading } from "../components/GradientHeading";
+import React, { useState } from "react";
+import useUser from "../lib/useUser";
+import Layout from "../components/Layout";
+import Form from "../components/Form";
+import fetchJson, { FetchError } from "../lib/fetchJson";
 
-export default function SimpleCard() {
+export default function Login() {
+  // here we just check if user is already logged in and redirect to profile
+  const { mutateUser } = useUser({
+    redirectTo: "/profile-sg",
+    redirectIfFound: true,
+  });
+
+  const [errorMsg, setErrorMsg] = useState("");
+
   return (
-    <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <Stack spacing={8} mx={"auto"} minW={"md"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <GradientHeading fontSize="4xl" title="Anmelden"/>
-          <Text fontSize={"lg"} color={"gray.600"}>
-            Melde dich jetzt an, um mitzuspielen!
-          </Text>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"md"}
-          p={8}
-        >
-          <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>E-Mail-Adresse</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Passwort</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <Stack spacing={10}>
-              <Stack
-                direction={{ base: "column", sm: "row" }}
-                align={"start"}
-                justify={"space-between"}
-              >
-                <Checkbox>Login merken</Checkbox>
-                <Link color={"blue.400"}>Passwort vergessen?</Link>
-              </Stack>
-              <Button
-                bg={"blue.400"}
-                color={"white"}
-                _hover={{
-                  bg: "blue.500",
-                }}
-              >
-                Anmelden
-              </Button>
-            </Stack>
-            <Stack pt={6}>
-              <Text align={"center"}>
-                Du hast noch keinen Account?{" "}
-                <Link color={"blue.400"}>Registrieren</Link>
-              </Text>
-            </Stack>
-          </Stack>
-        </Box>
-      </Stack>
-    </Flex>
+    <Layout>
+      <div className="login">
+        <Form
+          errorMessage={errorMsg}
+          onSubmit={async function handleSubmit(event) {
+            event.preventDefault();
+
+            const body = {
+              username: event.currentTarget.username.value,
+            };
+
+            try {
+              mutateUser(
+                await fetchJson("/api/login", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(body),
+                }),
+                false
+              );
+            } catch (error) {
+              if (error instanceof FetchError) {
+                setErrorMsg(error.data.message);
+              } else {
+                console.error("An unexpected error happened:", error);
+              }
+            }
+          }}
+        />
+      </div>
+      <style jsx>{`
+        .login {
+          max-width: 21rem;
+          margin: 0 auto;
+          padding: 1rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+      `}</style>
+    </Layout>
   );
 }
