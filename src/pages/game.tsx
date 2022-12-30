@@ -36,6 +36,7 @@ const Game = () => {
   var [activeStep, setActiveStep] = React.useState(0);
   var [scoreP1, setScoreP1] = useState(0);
   var [scoreP2, setScoreP2] = useState(0);
+  var [comInt, setComInt] = useState(0);
   var [progress, setProgress] = useState(initialProgress);
 
   function getRandomInt() {
@@ -45,6 +46,8 @@ const Game = () => {
     } else {
       randomInt = 1
     }
+    setComInt(randomInt);
+    console.log(comInt);
     return randomInt
   }
 
@@ -70,8 +73,7 @@ const Game = () => {
   function toastTimeout() {
     toast({
       position: "bottom",
-      title: "Zeit abgelaufen!",
-      status: "error",
+      title: "Dein Gegner hat geantwortet",
       duration: delay,
       isClosable: false,
     });
@@ -86,8 +88,8 @@ const Game = () => {
     setScoreP2((scoreP2 += getRandomInt()))
 
     toastTimeout();
-    correctOptionString.style.backgroundColor = theme.colors.green[500];
-    correctOptionString.style.color = theme.colors.white;
+    // correctOptionString.style.backgroundColor = theme.colors.green[500];
+    // correctOptionString.style.color = theme.colors.white;
 
     setTimeout(() => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
@@ -98,10 +100,10 @@ const Game = () => {
 
   // Check given response
   function checkResponse(clickedOption) {
-    setProgress(0);
+    // setProgress(0);
 
     // Give computer points
-    setScoreP2((scoreP2 += getRandomInt()))
+    // setScoreP2((scoreP2 += getRandomInt()))
 
     // Define clicked and correct options
     var correctOption = questions[activeStep].correctOption;
@@ -118,7 +120,7 @@ const Game = () => {
       clickedOptionString.style.color = theme.colors.gray[800];
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
-      handleNext(0);
+      //handleNext(0);
     }, delay * 2);
 
     if (clickedOption === correctOption) {
