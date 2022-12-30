@@ -51,7 +51,7 @@ export default function SignupForm() {
             setTimeout(() => {
               // alert(JSON.stringify(values, null, 2))
               actions.setSubmitting(false)
-              router.push("/load")
+              router.push("/room")
             }, 1000)
           }}
         >
@@ -87,7 +87,7 @@ export default function SignupForm() {
                           placeholder='••••••••••••••••'
                           {...field}
                         />
-                        <InputRightElement width='3rem'>
+                        <InputRightElement width='rem'>
                           <Button h='1.75rem' size='sm' onClick={handleClick}>
                             {show ? <ViewOffIcon /> : <ViewIcon />}
                           </Button>
