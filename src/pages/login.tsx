@@ -20,6 +20,8 @@ function validatePassword(value) {
   let error
   if (!value) {
     error = 'Bitte gib dein Passwort ein.';
+  } else if (value.length < 8) {
+    error = 'Dein Passwort hat mindestens 8 Zeichen.';
   }
   return error
 }
@@ -27,9 +29,6 @@ function validatePassword(value) {
 export default function SignupForm() {
   // Use router to go to next page
   const router = useRouter();
-
-  // Check if form fields are empty or not
-  const [input, setInput] = useState(' ')
 
   // Password show and hide
   const [show, setShow] = React.useState(false);
@@ -57,62 +56,63 @@ export default function SignupForm() {
         >
           {(props) => (
             <Form>
-              <Field name="email" validate={validateEmail}>
-                {({ field, form }) => (
-                  <FormControl isRequired isInvalid={form.errors.email && form.touched.email}>
-                    <FormLabel>E-Mail-Adresse</FormLabel>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="max.mustemann@mail.de"
-                      {...field}
-                    />
-                    <FormErrorMessage>{form.errors.email}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
-
-              <Field name="password" validate={validatePassword}>
-                {({ field, form }) => (
-                  <FormControl isRequired isInvalid={form.errors.password && form.touched.password}>
-                    <FormLabel>Passwort</FormLabel>
-                    <InputGroup size='md'>
+              <Stack spacing={6}>
+                <Field name="email" validate={validateEmail}>
+                  {({ field, form }) => (
+                    <FormControl isRequired isInvalid={form.errors.email && form.touched.email}>
+                      <FormLabel>E-Mail-Adresse</FormLabel>
                       <Input
-                        id="password"
-                        name="password"
-                        pr='4.5rem'
-                        type={show ? 'text' : 'password'}
-                        placeholder='••••••••••••••••'
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="max.mustemann@mail.de"
                         {...field}
                       />
-                      <InputRightElement width='4.5rem'>
-                        <Button h='1.75rem' size='sm' onClick={handleClick}>
-                          {show ? 'Hide' : 'Show'}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
-                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
-                  </FormControl>
-                )}
-              </Field>
+                      <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
 
-              <Button mt={4}
-                type='submit'
-                size="lg"
-                variant="solid"
-                colorScheme="orange"
-                rounded="button"
-                width="full"
-                isLoading={props.isSubmitting}
-              >
-                Einloggen</Button>
+                <Field name="password" validate={validatePassword}>
+                  {({ field, form }) => (
+                    <FormControl isRequired isInvalid={form.errors.password && form.touched.password}>
+                      <FormLabel>Passwort</FormLabel>
+                      <InputGroup size='md'>
+                        <Input
+                          id="password"
+                          name="password"
+                          pr='4.5rem'
+                          type={show ? 'text' : 'password'}
+                          placeholder='••••••••••••••••'
+                          {...field}
+                        />
+                        <InputRightElement width='4.5rem'>
+                          <Button h='1.75rem' size='sm' onClick={handleClick}>
+                            {show ? 'Hide' : 'Show'}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
+                      <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
 
+                <Button mt={4}
+                  type='submit'
+                  size="lg"
+                  variant="solid"
+                  colorScheme="orange"
+                  rounded="button"
+                  width="full"
+                  isLoading={props.isSubmitting}
+                >
+                  Einloggen</Button>
+
+              </Stack>
             </Form>
 
           )}
         </Formik>
-
       </Main>
     </Container>
   );
