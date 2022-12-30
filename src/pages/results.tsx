@@ -16,7 +16,7 @@ import users from "../images/users.json"
 
 function GameAssessment() {
   if (finalScoreP1 > finalScoreP2) {
-    return <Text fontSize="lg">Has genado.¡Felicidades!</Text>;
+    return <Text fontSize="lg">Has genado, ¡Felicidades!</Text>;
   } else if (finalScoreP1 == finalScoreP2) {
     return <Text fontSize="lg">¡Es un empat!</Text>;
   } else if (finalScoreP1 < finalScoreP2) {
