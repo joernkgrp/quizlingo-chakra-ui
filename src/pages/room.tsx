@@ -46,14 +46,7 @@ export default function Room() {
                 </Box> : <Box bg="gray.200" w="100%" p={4} borderRadius="lg">
                     ¡Disculpe! Es ist niemand von deinen Freunden online. Schaue später nochmal vorbei.
                 </Box>}
-
-
-
-
-
-
             </Main>
-
         </Container >
 
     )

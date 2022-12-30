@@ -7,6 +7,7 @@ import {
   Divider,
   Flex,
   Spacer,
+  Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -182,33 +183,33 @@ const Game = () => {
           <motion.div animate={{ width: "100%" }} className="boxBackground" />
         </div>
 
-        <Divider />
-
-        <Text fontSize="lg" fontWeight={"semibold"}>
-          Pregunta {activeStep + 1} de {maxSteps}
-        </Text>
-
-        <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
-
+        <Stack spacing={1}>
+          <Text fontSize="lg" fontWeight={"semibold"}>
+            Pregunta {activeStep + 1} de {maxSteps}
+          </Text>
+          <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
+        </Stack>
         <GradientHeading
-          fontSize="3xl"
+          fontSize="2xl"
           title={questions[activeStep].questionText}
         />
 
-        {questions[activeStep].options.map((option, optionIndex) => (
-          <Box
-            bgColor="gray.200"
-            borderRadius="lg"
-            p={4}
-            id={optionIndex.toString()}
-            /** _hover={{ bg: "gray.300" }} **/
-            onClick={() => checkResponse(optionIndex)}
-            cursor="pointer"
-            transition="0.25s ease-out"
-          >
-            <Text fontSize={"lg"}>{option}</Text>
-          </Box>
-        ))}
+        <Stack spacing={4}>
+          {questions[activeStep].options.map((option, optionIndex) => (
+            <Box
+              bgColor="gray.200"
+              borderRadius="lg"
+              p={3}
+              id={optionIndex.toString()}
+              /** _hover={{ bg: "gray.300" }} **/
+              onClick={() => checkResponse(optionIndex)}
+              cursor="pointer"
+              transition="0.25s ease-out"
+            >
+              <Text fontSize={"lg"}>{option}</Text>
+            </Box>
+          ))}
+        </Stack>
       </Main>
     </Container>
   );
