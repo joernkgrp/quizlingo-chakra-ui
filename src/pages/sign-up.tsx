@@ -1,96 +1,49 @@
-import {
-  Flex,
-  Box,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Stack,
-  Button,
-  Text,
-  useColorModeValue,
-  Link,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { GradientHeading } from "../components/GradientHeading";
+// The below import defines which components come from formik
+import { Button, FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, Stack, Text } from '@chakra-ui/react';
+import { Field, Form, Formik } from 'formik';
 
-export default function SignupCard() {
-  const [showPassword, setShowPassword] = useState(false);
+export default function FormikExample() {
+  function validateName(value) {
+    let error
+    if (!value) {
+      error = 'Name is required'
+    } else if (value.toLowerCase() !== 'naruto') {
+      error = "Jeez! You're not a fan 😱"
+    }
+    return error
+  }
 
   return (
-    <Flex
-      minH={"100vh"}
-      align={"center"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
+    <Formik
+      initialValues={{ name: 'Sasuke' }}
+      onSubmit={(values, actions) => {
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2))
+          actions.setSubmitting(false)
+        }, 1000)
+      }}
     >
-      <Stack spacing={8} mx={"auto"} minW={"md"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <GradientHeading fontSize="4xl" title="Registrieren" />
-
-          <Text fontSize={"lg"} color={"gray.600"}>
-            Lege jetzt ein Konto an, um mitzuspielen!
-          </Text>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"md"}
-          p={8}
-        >
-          <Stack spacing={4}>
-            <FormControl id="userName" isRequired>
-              <FormLabel>Username</FormLabel>
-              <Input type="text" />
-            </FormControl>
-
-            <FormControl id="firstName" isRequired>
-              <FormLabel>Vorname</FormLabel>
-              <Input type="text" />
-            </FormControl>
-
-            <FormControl id="email" isRequired>
-              <FormLabel>E-Mail-Adresse</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password" isRequired>
-              <FormLabel>Passwort</FormLabel>
-              <InputGroup>
-                <Input type={showPassword ? "text" : "password"} />
-                <InputRightElement h={"full"}>
-                  <Button
-                    variant={"ghost"}
-                    onClick={() =>
-                      setShowPassword((showPassword) => !showPassword)
-                    }
-                  >
-                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </FormControl>
-            <Stack spacing={10} pt={2}>
-              <Button
-                loadingText="Submitting"
-                size={"lg"}
-                colorScheme="orange"
-                _hover={{
-                  bg: "blue.500",
-                }}
-              >
-                Registrieren
-              </Button>
-            </Stack>
-            <Stack pt={6}>
-              <Text align={"center"}>
-                Bereits ein Konto? <Link color={"orange.500"}>Einloggen</Link>
-              </Text>
-            </Stack>
-          </Stack>
-        </Box>
-      </Stack>
-    </Flex>
-  );
+      {(props) => (
+        <Form>
+          <Field name='name' validate={validateName}>
+            {({ field, form }) => (
+              <FormControl isInvalid={form.errors.name && form.touched.name}>
+                <FormLabel>First name</FormLabel>
+                <Input {...field} placeholder='name' />
+                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+              </FormControl>
+            )}
+          </Field>
+          <Button
+            mt={4}
+            colorScheme='teal'
+            isLoading={props.isSubmitting}
+            type='submit'
+          >
+            Submit
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  )
 }

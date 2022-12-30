@@ -1,42 +1,33 @@
-import { Stack, HStack, VStack } from "@chakra-ui/react";
-import { Box, Flex } from "@chakra-ui/react";
-import { Avatar, AvatarBadge, AvatarGroup } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
+import { Avatar, Text, HStack } from "@chakra-ui/react";
 
 export const User = ({
   name,
+  avatarSrc,
   score,
   variant,
 }: {
   name: string;
+  avatarSrc: any;
   score: number;
   variant: string;
 }) => {
   return variant === "left" ? (
     <>
       <HStack align={"center"}>
-        <Avatar size="lg" name="Dan Abramov" src="https://bit.ly/dan-abramov" />
-        <VStack spacing="0" align={"left"}>
-          {/** <Text fontSize="md">{name}</Text> **/}
-          <Text fontSize="2xl" as="b">
-            {score}
-          </Text>
-        </VStack>
+        <Avatar size="lg" name={name} src={avatarSrc} />
+        <Text fontSize="2xl" as="b">
+          {score}
+        </Text>
       </HStack>
     </>
   ) : (
     <>
-      <Flex align={"center"}>
+      <HStack align={"center"}>
         <Text fontSize="2xl" as="b">
           {score}
         </Text>
-        <Avatar
-          ml={2}
-          size="lg"
-          name="Dan Abramov"
-          src="https://bit.ly/dan-abramov"
-        />
-      </Flex>
+        <Avatar size="lg" name={name} src={avatarSrc} />
+      </HStack>
     </>
   );
 };

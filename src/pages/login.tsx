@@ -1,58 +1,119 @@
 import React, { useState } from "react";
-import useUser from "../lib/useUser";
-import Layout from "../components/Layout";
-import Form from "../components/Form";
-import fetchJson, { FetchError } from "../lib/fetchJson";
+import { useRouter } from "next/router";
+import { Field, Form, Formik } from 'formik';
+import { Button, Container, FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, Stack, Text } from '@chakra-ui/react';
+import { GradientHeading } from "../components/GradientHeading";
+import { Main } from '../components/Main';
 
-export default function Login() {
-  // here we just check if user is already logged in and redirect to profile
-  const { mutateUser } = useUser({
-    redirectTo: "/profile-sg",
-    redirectIfFound: true,
-  });
+// Define error messages
+function validateEmail(value) {
+  let error
+  if (!value) {
+    error = 'Bitte gib eine E-Mail-Adresse ein.'
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+    error = 'Bitte gib eine gültige E-Mail-Adresse ein.';
+  }
+  return error
+}
 
-  const [errorMsg, setErrorMsg] = useState("");
+function validatePassword(value) {
+  let error
+  if (!value) {
+    error = 'Bitte gib dein Passwort ein.';
+  }
+  return error
+}
+
+export default function SignupForm() {
+  // Use router to go to next page
+  const router = useRouter();
+
+  // Check if form fields are empty or not
+  const [input, setInput] = useState(' ')
+
+  // Password show and hide
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
 
   return (
-    <Layout>
-      <div className="login">
-        <Form
-          errorMessage={errorMsg}
-          onSubmit={async function handleSubmit(event) {
-            event.preventDefault();
+    <Container>
+      <Main>
+        <Stack align={"left"}>
+          <GradientHeading fontSize="4xl" title="Anmelden" />
+          <Text fontSize={"lg"} color={"gray.600"}>
+            Melde dich jetzt an, um ein neues Spiel zu starten.
+          </Text>
+        </Stack>
 
-            const body = {
-              username: event.currentTarget.username.value,
-            };
-
-            try {
-              mutateUser(
-                await fetchJson("/api/login", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify(body),
-                }),
-                false
-              );
-            } catch (error) {
-              if (error instanceof FetchError) {
-                setErrorMsg(error.data.message);
-              } else {
-                console.error("An unexpected error happened:", error);
-              }
-            }
+        <Formik
+          initialValues={{ email: '', password: '' }}
+          onSubmit={(values, actions) => {
+            setTimeout(() => {
+              // alert(JSON.stringify(values, null, 2))
+              actions.setSubmitting(false)
+              router.push("/load")
+            }, 1000)
           }}
-        />
-      </div>
-      <style jsx>{`
-        .login {
-          max-width: 21rem;
-          margin: 0 auto;
-          padding: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-      `}</style>
-    </Layout>
+        >
+          {(props) => (
+            <Form>
+              <Field name="email" validate={validateEmail}>
+                {({ field, form }) => (
+                  <FormControl isRequired isInvalid={form.errors.email && form.touched.email}>
+                    <FormLabel>E-Mail-Adresse</FormLabel>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="max.mustemann@mail.de"
+                      {...field}
+                    />
+                    <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+
+              <Field name="password" validate={validatePassword}>
+                {({ field, form }) => (
+                  <FormControl isRequired isInvalid={form.errors.password && form.touched.password}>
+                    <FormLabel>Passwort</FormLabel>
+                    <InputGroup size='md'>
+                      <Input
+                        id="password"
+                        name="password"
+                        pr='4.5rem'
+                        type={show ? 'text' : 'password'}
+                        placeholder='••••••••••••••••'
+                        {...field}
+                      />
+                      <InputRightElement width='4.5rem'>
+                        <Button h='1.75rem' size='sm' onClick={handleClick}>
+                          {show ? 'Hide' : 'Show'}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+
+              <Button mt={4}
+                type='submit'
+                size="lg"
+                variant="solid"
+                colorScheme="orange"
+                rounded="button"
+                width="full"
+                isLoading={props.isSubmitting}
+              >
+                Einloggen</Button>
+
+            </Form>
+
+          )}
+        </Formik>
+
+      </Main>
+    </Container>
   );
-}
+};

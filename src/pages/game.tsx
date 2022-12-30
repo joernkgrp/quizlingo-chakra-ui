@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-
 import {
   Box,
   Container,
   Divider,
   Flex,
-  Progress,
   Spacer,
   Text,
   useToast,
@@ -17,6 +15,7 @@ import { questions } from "../data/questions";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 import theme from "../theme";
+import users from "../images/users.json"
 
 // Global variables to be exported
 var finalScore = 0;
@@ -86,6 +85,7 @@ const Game = () => {
   function checkResponse(clickedOption) {
     setProgress(0);
 
+    // Define clicked and correct options
     var correctOption = questions[activeStep].correctOption;
     var clickedOptionString = document.getElementById(clickedOption.toString());
     var correctOptionString = document.getElementById(correctOption.toString());
@@ -94,6 +94,7 @@ const Game = () => {
     correctOptionString.style.backgroundColor = theme.colors.green[500];
     correctOptionString.style.color = theme.colors.white;
 
+    // Colorize answers
     setTimeout(() => {
       clickedOptionString.style.backgroundColor = theme.colors.gray[200];
       clickedOptionString.style.color = theme.colors.gray[800];
@@ -148,13 +149,11 @@ const Game = () => {
     <Container>
       <Main>
         <Flex align={"center"}>
-          <Text fontSize="lg" fontWeight={"semibold"}>
-            Pregunta {activeStep + 1} de {maxSteps}
-          </Text>
-
+          <User name="Tom Bola" variant="left" avatarSrc={users[0].imageURL} score={score}></User>
           <Spacer />
 
-          <User name="Tom Bola" variant="right" score={score}></User>
+
+          <User name="Tom Bola" variant="right" avatarSrc={users[1].imageURL} score={score}></User>
         </Flex>
 
         <div className="wrapper">
@@ -168,6 +167,10 @@ const Game = () => {
         </div>
 
         <Divider />
+
+        <Text fontSize="lg" fontWeight={"semibold"}>
+          Pregunta {activeStep + 1} de {maxSteps}
+        </Text>
 
         <Text fontSize={"lg"}>{questions[activeStep].taskText}</Text>
 

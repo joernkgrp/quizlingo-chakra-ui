@@ -63,7 +63,7 @@ const Index = () => {
             </ListItem>
           </List>
           <Button
-            onClick={() => router.push("/load")}
+            onClick={() => router.push("/login")}
             size="lg"
             variant="solid"
             colorScheme="orange"
