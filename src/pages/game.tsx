@@ -74,7 +74,7 @@ const Game = () => {
   function toastTimeout() {
     toast({
       position: "bottom",
-      title: "Dein Gegner hat geantwortet",
+      title: "Deine Gegnerin hat geantwortet",
       duration: delay,
       isClosable: false,
     });
@@ -101,10 +101,7 @@ const Game = () => {
 
   // Check given response
   function checkResponse(clickedOption) {
-    // setProgress(0);
-
-    // Give computer points
-    // setScoreP2((scoreP2 += getRandomInt()))
+    setProgress(0);
 
     // Define clicked and correct options
     var correctOption = questions[activeStep].correctOption;
