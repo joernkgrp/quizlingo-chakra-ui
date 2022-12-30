@@ -74,7 +74,8 @@ const Game = () => {
   function toastTimeout() {
     toast({
       position: "bottom",
-      title: "Deine Gegnerin hat geantwortet",
+      title: "Deine Gegnerin hat geantwortet.",
+      status: "warning",
       duration: delay,
       isClosable: false,
     });
@@ -89,8 +90,8 @@ const Game = () => {
     setScoreP2((scoreP2 += getRandomInt()))
 
     toastTimeout();
-    correctOptionString.style.backgroundColor = theme.colors.green[500];
-    correctOptionString.style.color = theme.colors.white;
+    // correctOptionString.style.backgroundColor = theme.colors.green[500];
+    // correctOptionString.style.color = theme.colors.white;
 
     setTimeout(() => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
