@@ -42,7 +42,7 @@ const Game = () => {
 
   function getRandomInt() {
     var randomInt = Math.random();
-    if (randomInt < 0.4) {
+    if (randomInt < 0.5) {
       randomInt = 0
     } else {
       randomInt = 1
