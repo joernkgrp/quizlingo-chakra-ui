@@ -19,15 +19,15 @@ export default function Room() {
             <Main>
                 <Flex>
                     <Box flex="1">
-                        <GradientHeading title="¡Hola, Jörn!" />
+                        <GradientHeading title="¡Buenas tardes, Jörn!" />
                     </Box>
                     <Menu>
                         <MenuButton as={Button} colorScheme='orange' aria-label='Menu'><HamburgerIcon /></MenuButton>
                         <MenuList>
-                            <MenuItem>Profil</MenuItem>
-                            <MenuItem>Einstellungen</MenuItem>
+                            <MenuItem isDisabled>Profil</MenuItem>
+                            <MenuItem isDisabled>Einstellungen</MenuItem>
                             <MenuDivider />
-                            <MenuItem onClick={() => router.push("/")}>Logout</MenuItem>
+                            <MenuItem onClick={() => router.push("/")}>Ausloggen</MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>
@@ -35,13 +35,13 @@ export default function Room() {
 
                 {game ? <Box bg="gray.200" w="100%" p={4} borderRadius="lg">
                     <HStack spacing={3}>
-                        <Avatar name='Claire Anlage' src={users[1].imageURL} size='lg' />
-                        <Stack spacing={1}>
+                        <Avatar name='Claire Anlage' src={users[1].imageURL} />
+                        <Stack spacing={0}>
                             <Heading size="md">Claire Anlage</Heading>
-                            <Text fontSize="md">Level 3</Text>
+                            <Text fontSize="md">Level 2</Text>
                         </Stack>
                         <Spacer />
-                        <Button onClick={() => router.push("/load")} colorScheme='orange'>Jugar</Button>
+                        <Button onClick={() => router.push("/load")} colorScheme='orange'>Quiz starten</Button>
                     </HStack>
                 </Box> : <Box bg="gray.200" w="100%" p={4} borderRadius="lg">
                     ¡Disculpe! Es ist niemand von deinen Freunden online. Schaue später nochmal vorbei.
