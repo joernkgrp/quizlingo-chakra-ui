@@ -14,14 +14,14 @@ import { GradientHeading } from "../components/GradientHeading";
 import { finalScoreP1, finalScoreP2 } from "./game";
 import users from "../images/users.json"
 
-function GameAssessment(props) {
-  if (props.finalScoreP1 == 5) {
-    return <Text fontSize="lg">¡Fantástico! Besser geht es nicht mehr.</Text>;
-  } else if (props.finalScoreP1 > 2) {
-    return <Text fontSize="lg">Das war schon richtig bueno.</Text>;
-  } else {
+function GameAssessment() {
+  if (finalScoreP1 > finalScoreP2) {
+    return <Text fontSize="lg">Has genado.¡Felicidades!</Text>;
+  } else if (finalScoreP1 == finalScoreP2) {
+    return <Text fontSize="lg">¡Es un empat!</Text>;
+  } else if (finalScoreP1 < finalScoreP2) {
     return (
-      <Text fontSize="lg">Beim nächsten Mal wird es bestimmt besser.</Text>
+      <Text fontSize="lg">¡Has perdido! Lástima.</Text>
     );
   }
 }
@@ -38,14 +38,13 @@ const Results = () => {
       >
         <Main>
           <GradientHeading fontSize="3xl" title="Spiel beendet" />
-          <Divider />
 
           <HStack>
             <User name="Tom Bola" score={finalScoreP1} avatarSrc={users[0].imageURL} variant="P1"></User>
             <Spacer />
             <User name="Claire Anlage" score={finalScoreP2} avatarSrc={users[1].imageURL} variant="P2"></User>
           </HStack>
-          <GameAssessment finalScore={finalScoreP1} />
+          <GameAssessment />
 
           <Spacer minH={8} />
 
