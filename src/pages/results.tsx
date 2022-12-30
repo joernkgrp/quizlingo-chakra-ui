@@ -11,13 +11,13 @@ import {
 import { Main } from "../components/Main";
 import { User } from "../components/User";
 import { GradientHeading } from "../components/GradientHeading";
-import { finalScore } from "./game";
+import { finalScoreP1, finalScoreP2 } from "./game";
 import users from "../images/users.json"
 
 function GameAssessment(props) {
-  if (props.finalScore == 5) {
+  if (props.finalScoreP1 == 5) {
     return <Text fontSize="lg">¡Fantástico! Besser geht es nicht mehr.</Text>;
-  } else if (props.finalScore > 2) {
+  } else if (props.finalScoreP1 > 2) {
     return <Text fontSize="lg">Das war schon richtig bueno.</Text>;
   } else {
     return (
@@ -41,11 +41,11 @@ const Results = () => {
           <Divider />
 
           <HStack>
-            <User name="Tom Bola" score={finalScore} avatarSrc={users[0].imageURL} variant="left"></User>
+            <User name="Tom Bola" score={finalScoreP1} avatarSrc={users[0].imageURL} variant="P1"></User>
             <Spacer />
-            <User name="Claire Anlage" score={finalScore} avatarSrc={users[1].imageURL} variant="left"></User>
+            <User name="Claire Anlage" score={finalScoreP2} avatarSrc={users[1].imageURL} variant="P2"></User>
           </HStack>
-          <GameAssessment finalScore={finalScore} />
+          <GameAssessment finalScore={finalScoreP1} />
 
           <Spacer minH={8} />
 

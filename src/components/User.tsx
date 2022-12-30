@@ -11,7 +11,7 @@ export const User = ({
   score: number;
   variant: string;
 }) => {
-  return variant === "left" ? (
+  return variant === "P1" ? (
     <>
       <HStack align={"center"}>
         <Avatar size="lg" name={name} src={avatarSrc} />

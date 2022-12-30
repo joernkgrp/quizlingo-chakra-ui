@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { Field, Form, Formik } from 'formik';
 import { Button, Container, FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, Stack, Text } from '@chakra-ui/react';
 import { GradientHeading } from "../components/GradientHeading";
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { Main } from '../components/Main';
 
 // Define error messages
@@ -21,7 +22,7 @@ function validatePassword(value) {
   if (!value) {
     error = 'Bitte gib dein Passwort ein.';
   } else if (value.length < 8) {
-    error = 'Dein Passwort hat mindestens 8 Zeichen.';
+    error = 'Das Passwort hat mindestens 8 Zeichen.';
   }
   return error
 }
@@ -86,9 +87,9 @@ export default function SignupForm() {
                           placeholder='••••••••••••••••'
                           {...field}
                         />
-                        <InputRightElement width='4.5rem'>
+                        <InputRightElement width='3rem'>
                           <Button h='1.75rem' size='sm' onClick={handleClick}>
-                            {show ? 'Hide' : 'Show'}
+                            {show ? <ViewOffIcon /> : <ViewIcon />}
                           </Button>
                         </InputRightElement>
                       </InputGroup>

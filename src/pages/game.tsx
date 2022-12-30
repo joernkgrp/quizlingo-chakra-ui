@@ -18,11 +18,12 @@ import theme from "../theme";
 import users from "../images/users.json"
 
 // Global variables to be exported
-var finalScore = 0;
+var finalScoreP1 = 0;
+var finalScoreP2 = 0;
 
 const Game = () => {
-  const delay = 1000;
   const answerTime = 10000;
+  const delay = 1000;
   const initialProgress = 100;
   const timerRefresh = 1000;
 
@@ -33,8 +34,20 @@ const Game = () => {
 
   // Define React hooks
   var [activeStep, setActiveStep] = React.useState(0);
-  var [score, setScore] = useState(0);
+  var [scoreP1, setScoreP1] = useState(0);
+  var [scoreP2, setScoreP2] = useState(0);
   var [progress, setProgress] = useState(initialProgress);
+
+  function getRandomInt() {
+    var randomInt = Math.random();
+    if (randomInt < 0.5) {
+      randomInt = 0
+    } else {
+      randomInt = 1
+    }
+    return randomInt
+  }
+
 
   // Go to next question
   function handleNext(delay) {
@@ -44,8 +57,8 @@ const Game = () => {
       }
 
       if (activeStep == maxSteps - 1) {
-        finalScore = score;
-        console.log(score);
+        finalScoreP1 = scoreP1;
+        finalScoreP2 = scoreP2;
         router.push("/results");
       }
 
@@ -69,6 +82,9 @@ const Game = () => {
     var correctOption = questions[activeStep].correctOption;
     var correctOptionString = document.getElementById(correctOption.toString());
 
+    // Give computer points
+    setScoreP2((scoreP2 += getRandomInt()))
+
     toastTimeout();
     correctOptionString.style.backgroundColor = theme.colors.green[500];
     correctOptionString.style.color = theme.colors.white;
@@ -76,14 +92,16 @@ const Game = () => {
     setTimeout(() => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
-
-      handleNext(delay);
-    }, delay);
+      handleNext(0);
+    }, delay * 2);
   }
 
   // Check given response
   function checkResponse(clickedOption) {
     setProgress(0);
+
+    // Give computer points
+    setScoreP2((scoreP2 += getRandomInt()))
 
     // Define clicked and correct options
     var correctOption = questions[activeStep].correctOption;
@@ -100,13 +118,11 @@ const Game = () => {
       clickedOptionString.style.color = theme.colors.gray[800];
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
       correctOptionString.style.color = theme.colors.gray[800];
-
-      handleNext(delay);
-    }, delay);
+      handleNext(0);
+    }, delay * 2);
 
     if (clickedOption === correctOption) {
-      setScore((score += 1));
-      console.log(score);
+      setScoreP1((scoreP1 += 1));
     } else {
       clickedOptionString.style.backgroundColor = theme.colors.red[500];
       clickedOptionString.style.color = theme.colors.white;
@@ -149,11 +165,9 @@ const Game = () => {
     <Container>
       <Main>
         <Flex align={"center"}>
-          <User name="Tom Bola" variant="left" avatarSrc={users[0].imageURL} score={score}></User>
+          <User name="Tom Bola" variant="P1" avatarSrc={users[0].imageURL} score={scoreP1}></User>
           <Spacer />
-
-
-          <User name="Tom Bola" variant="right" avatarSrc={users[1].imageURL} score={score}></User>
+          <User name="Claire Anlage" variant="P2" avatarSrc={users[1].imageURL} score={scoreP2}></User>
         </Flex>
 
         <div className="wrapper">
@@ -199,4 +213,4 @@ const Game = () => {
 };
 
 export default Game;
-export { finalScore };
+export { finalScoreP1, finalScoreP2 };
