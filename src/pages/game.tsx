@@ -89,8 +89,8 @@ const Game = () => {
     setScoreP2((scoreP2 += getRandomInt()))
 
     toastTimeout();
-    // correctOptionString.style.backgroundColor = theme.colors.green[500];
-    // correctOptionString.style.color = theme.colors.white;
+    correctOptionString.style.backgroundColor = theme.colors.green[500];
+    correctOptionString.style.color = theme.colors.white;
 
     setTimeout(() => {
       correctOptionString.style.backgroundColor = theme.colors.gray[200];
