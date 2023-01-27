@@ -1,30 +1,45 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { Field, Form, Formik } from 'formik';
-import { Button, Container, FormControl, FormHelperText, FormErrorMessage, FormLabel, Input, InputGroup, InputRightElement, Stack, Text } from '@chakra-ui/react';
+import { Field, Form, Formik } from "formik";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormHelperText,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { GradientHeading } from "../components/GradientHeading";
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-import { Main } from '../components/Main';
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { Main } from "../components/Main";
 
 // Define error messages
+
+// To do: Use objects for values and errors
+// To do: Username statt E-Mail
 function validateEmail(value) {
-  let error
+  let error;
   if (!value) {
-    error = 'Bitte gib eine E-Mail-Adresse ein.'
+    error = "Bitte gib eine E-Mail-Adresse ein.";
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-    error = 'Bitte gib eine gültige E-Mail-Adresse ein.';
+    error = "Bitte gib eine gültige E-Mail-Adresse ein.";
   }
-  return error
+  return error;
 }
 
 function validatePassword(value) {
-  let error
+  let error;
   if (!value) {
-    error = 'Bitte gib dein Passwort ein.';
+    error = "Bitte gib dein Passwort ein.";
   } else if (value.length < 8) {
-    error = 'Das Passwort hat mindestens 8 Zeichen.';
+    error = "Das Passwort hat mindestens 8 Zeichen.";
   }
-  return error
+  return error;
 }
 
 export default function SignupForm() {
@@ -46,13 +61,13 @@ export default function SignupForm() {
         </Stack>
 
         <Formik
-          initialValues={{ email: '', password: '' }}
+          initialValues={{ email: "", password: "" }}
           onSubmit={(values, actions) => {
             setTimeout(() => {
               // alert(JSON.stringify(values, null, 2))
-              actions.setSubmitting(false)
-              router.push("/room")
-            }, 1000)
+              actions.setSubmitting(false);
+              router.push("/room");
+            }, 1000);
           }}
         >
           {(props) => (
@@ -60,7 +75,10 @@ export default function SignupForm() {
               <Stack spacing={6}>
                 <Field name="email" validate={validateEmail}>
                   {({ field, form }) => (
-                    <FormControl isRequired isInvalid={form.errors.email && form.touched.email}>
+                    <FormControl
+                      isRequired
+                      isInvalid={form.errors.email && form.touched.email}
+                    >
                       <FormLabel>E-Mail-Adresse</FormLabel>
                       <Input
                         id="email"
@@ -76,30 +94,36 @@ export default function SignupForm() {
 
                 <Field name="password" validate={validatePassword}>
                   {({ field, form }) => (
-                    <FormControl isRequired isInvalid={form.errors.password && form.touched.password}>
+                    <FormControl
+                      isRequired
+                      isInvalid={form.errors.password && form.touched.password}
+                    >
                       <FormLabel>Passwort</FormLabel>
-                      <InputGroup size='md'>
+                      <InputGroup size="md">
                         <Input
                           id="password"
                           name="password"
-                          pr='4.5rem'
-                          type={show ? 'text' : 'password'}
-                          placeholder='••••••••••••••••'
+                          pr="4.5rem"
+                          type={show ? "text" : "password"}
+                          placeholder="••••••••••••••••"
                           {...field}
                         />
-                        <InputRightElement width='rem'>
-                          <Button h='1.75rem' size='sm' onClick={handleClick}>
+                        <InputRightElement width="rem">
+                          <Button h="1.75rem" size="sm" onClick={handleClick}>
                             {show ? <ViewOffIcon /> : <ViewIcon />}
                           </Button>
                         </InputRightElement>
                       </InputGroup>
-                      <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                      <FormErrorMessage>
+                        {form.errors.password}
+                      </FormErrorMessage>
                     </FormControl>
                   )}
                 </Field>
 
-                <Button mt={4}
-                  type='submit'
+                <Button
+                  mt={4}
+                  type="submit"
                   size="lg"
                   variant="solid"
                   colorScheme="orange"
@@ -107,14 +131,13 @@ export default function SignupForm() {
                   width="full"
                   isLoading={props.isSubmitting}
                 >
-                  Einloggen</Button>
-
+                  Einloggen
+                </Button>
               </Stack>
             </Form>
-
           )}
         </Formik>
       </Main>
     </Container>
   );
-};
+}
