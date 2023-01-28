@@ -7,15 +7,21 @@ export default function useWebSockets() {
     );
 
     websocket.onopen = () => {
-      var msg = { user: "joern" };
       alert("Connection established");
+      const msg = {
+        type: "subscribe",
+        channel: "/topic/interactions",
+        interval: 500,
+      };
       websocket.send(JSON.stringify(msg));
-      console.log(JSON.stringify(msg));
+      websocket.send(
+        JSON.stringify({ username: "joern", selectedAnswer: 1, questionId: 1 })
+      );
     };
 
     websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      alert(`[message] Data received from server: ${event.data}`);
+      const data = event.data;
+      alert(`[message] Data received from server: ${data}`);
     };
 
     return () => {
