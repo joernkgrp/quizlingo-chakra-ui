@@ -3,17 +3,11 @@ import * as React from "react";
 export default function useWebSockets() {
   React.useEffect(() => {
     const websocket = new WebSocket(
-      "wss://quizlingo-backend.herokuapp.com/websocket"
+      "wss://quizlingo-backend.herokuapp.com/websocket-native"
     );
 
     websocket.onopen = () => {
       alert("Connection established");
-      const msg = {
-        type: "subscribe",
-        channel: "/topic/interactions",
-        interval: 500,
-      };
-      websocket.send(JSON.stringify(msg));
       websocket.send(
         JSON.stringify({ username: "joern", selectedAnswer: 1, questionId: 1 })
       );
