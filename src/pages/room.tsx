@@ -55,6 +55,12 @@ export default function Room() {
       console.log(event.data);
       console.log(data.canStart);
       if (data.canStart == true) {
+        const users = data.players;
+        if (users[0] == localStorage.getItem("username")) {
+          localStorage.setItem("userP2", users[1]);
+        } else {
+          localStorage.setItem("userP2", users[0]);
+        }
         router.push("/game");
       }
     };
@@ -103,27 +109,6 @@ export default function Room() {
         <Button colorScheme="orange" onClick={() => joinRoom()}>
           Neues Spiel
         </Button>
-
-        {game ? (
-          <Box bg="gray.200" w="100%" p={4} borderRadius="lg">
-            <HStack spacing={3}>
-              <Avatar name="Claire Anlage" src={users[1].imageURL} />
-              <Stack spacing={0}>
-                <Heading size="md">Claire Anlage</Heading>
-                <Text fontSize="md">Level 2</Text>
-              </Stack>
-              <Spacer />
-              <Button onClick={() => router.push("/load")} colorScheme="orange">
-                Quiz starten
-              </Button>
-            </HStack>
-          </Box>
-        ) : (
-          <Box bg="gray.200" w="100%" p={4} borderRadius="lg">
-            ¡Disculpe! Es ist niemand von deinen Freunden online. Schaue später
-            nochmal vorbei.
-          </Box>
-        )}
       </Main>
     </Container>
   );

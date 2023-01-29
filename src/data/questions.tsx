@@ -1,5 +1,6 @@
 const questions = [
   {
+    id: 17,
     category: "grammar",
     level: 1,
     type: "gap",
@@ -10,6 +11,7 @@ const questions = [
     correctOption: 3,
   },
   {
+    id: 14,
     category: "grammar",
     type: "gap",
     taskText: "Welcher Satz ist korrekt?",
@@ -34,6 +36,7 @@ const questions = [
     level: 1,
   },
   {
+    id: 5,
     category: "grammar",
     level: 1,
     type: "translate",
@@ -49,6 +52,7 @@ const questions = [
     correctOption: 1,
   },
   {
+    id: 4,
     category: "grammar",
     level: 2,
     type: "translate",
@@ -64,6 +68,7 @@ const questions = [
     correctOption: 0,
   },
   {
+    id: 3,
     category: "grammar",
     level: 1,
     type: "translate",

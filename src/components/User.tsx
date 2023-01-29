@@ -15,6 +15,7 @@ export const User = ({
     <>
       <HStack align={"center"}>
         <Avatar size="lg" name={name} src={avatarSrc} />
+        <Text>{name}</Text>
         <Text fontSize="2xl" as="b">
           {score}
         </Text>
@@ -26,6 +27,7 @@ export const User = ({
         <Text fontSize="2xl" as="b">
           {score}
         </Text>
+        <Text>{name}</Text>
         <Avatar size="lg" name={name} src={avatarSrc} />
       </HStack>
     </>

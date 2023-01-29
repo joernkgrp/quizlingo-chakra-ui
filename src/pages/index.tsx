@@ -31,21 +31,27 @@ const Index = () => {
 
           <Text color="text">
             Spanisch lernen im spielerischen Duell mit <br />
-            <Code>Next.js</Code> + <Code>Chakra UI</Code> +{" "}
-            <Code>TypeScript</Code>.
+            <Code>Spring</Code> + <Code>Java</Code> + <Code>Next.js</Code> +{" "}
+            <Code>Chakra UI</Code> + <Code>TypeScript</Code>.
           </Text>
 
           <List spacing={3} my={0} color="text">
             <ListItem>
               <ListIcon as={CheckCircleIcon} color="green.500" />
-              <Link isExternal href="https://chakra-ui.com" flexGrow={1} mr={2}>
-                Chakra UI <LinkIcon />
+              <Link isExternal href="https://spring.io/" flexGrow={1} mr={2}>
+                Spring <LinkIcon />
               </Link>
             </ListItem>
             <ListItem>
               <ListIcon as={CheckCircleIcon} color="green.500" />
               <Link isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
                 Next.js <LinkIcon />
+              </Link>
+            </ListItem>
+            <ListItem>
+              <ListIcon as={CheckCircleIcon} color="green.500" />
+              <Link isExternal href="https://chakra-ui.com" flexGrow={1} mr={2}>
+                Chakra UI <LinkIcon />
               </Link>
             </ListItem>
           </List>

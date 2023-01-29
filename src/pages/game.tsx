@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import {
   Box,
   Container,
-  Divider,
   Flex,
   Spacer,
   Stack,
@@ -12,9 +11,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { User } from "../components/User";
-import { questions } from "../data/questions";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
+//import { questions } from "../data/questions";
 import theme from "../theme";
 import users from "../images/users.json";
 
@@ -22,7 +21,7 @@ import users from "../images/users.json";
 var finalScoreP1 = 0;
 var finalScoreP2 = 0;
 
-const Game = () => {
+export default function Game() {
   const answerTime = 10000;
   const delay = 1000;
   const initialProgress = 100;
@@ -31,7 +30,8 @@ const Game = () => {
   const router = useRouter(); // Go to next page
   const toast = useToast(); // Define toast
 
-  var maxSteps = questions.length; // Number of questions
+  const [questions, setQuestions] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   // Define React hooks
   var [activeStep, setActiveStep] = React.useState(0);
@@ -39,6 +39,8 @@ const Game = () => {
   var [scoreP2, setScoreP2] = useState(0);
   var [comInt, setComInt] = useState(0);
   var [progress, setProgress] = useState(initialProgress);
+  const [userName, setUserName] = useState("");
+  const [status, setStatus] = useState("");
 
   const endpoint = "https://quizlingo-backend.herokuapp.com/questions";
 
@@ -52,28 +54,20 @@ const Game = () => {
     },
   };
 
-  console.log(options);
-
   useEffect(() => {
+    setLoading(true);
     fetch(endpoint, options)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Hi");
-        console.log(data);
+        setQuestions(data);
+        setLoading(false);
       });
   }, []);
 
-  function getRandomInt() {
-    var randomInt = Math.random();
-    if (randomInt < 0.5) {
-      randomInt = 0;
-    } else {
-      randomInt = 1;
-    }
-    setComInt(randomInt);
-    console.log(comInt);
-    return randomInt;
-  }
+  if (isLoading) return <p>Loading...</p>;
+  if (!questions) return <p>No profile data</p>;
+
+  var maxSteps = questions.length; // Number of questions
 
   // Go to next question
   function handleNext(delay) {
@@ -83,8 +77,6 @@ const Game = () => {
       }
 
       if (activeStep == maxSteps - 1) {
-        finalScoreP1 = scoreP1;
-        finalScoreP2 = scoreP2;
         router.push("/results");
       }
 
@@ -108,9 +100,6 @@ const Game = () => {
     var correctOption = questions[activeStep].correctOption;
     var correctOptionString = document.getElementById(correctOption.toString());
 
-    // Give computer points
-    setScoreP2((scoreP2 += getRandomInt()));
-
     toastTimeout();
     // correctOptionString.style.backgroundColor = theme.colors.green[500];
     // correctOptionString.style.color = theme.colors.white;
@@ -125,6 +114,21 @@ const Game = () => {
   // Check given response
   function checkResponse(clickedOption) {
     setProgress(0);
+
+    const websocket = new WebSocket(
+      "wss://quizlingo-backend.herokuapp.com/websocket-answer"
+    );
+
+    setTimeout(() => {
+      websocket.send(
+        JSON.stringify({
+          username: localStorage.getItem("username"),
+          selectedAnswer: clickedOption,
+          questionId: questions[activeStep].id,
+          currentScore: scoreP1,
+        })
+      );
+    }, 1000);
 
     // Define clicked and correct options
     var correctOption = questions[activeStep].correctOption;
@@ -144,9 +148,7 @@ const Game = () => {
       //handleNext(0);
     }, delay * 2);
 
-    if (clickedOption === correctOption) {
-      setScoreP1((scoreP1 += 1));
-    } else {
+    if (clickedOption !== correctOption) {
       clickedOptionString.style.backgroundColor = theme.colors.red[500];
       clickedOptionString.style.color = theme.colors.white;
     }
@@ -173,6 +175,34 @@ const Game = () => {
   };
 
   useEffect(() => {
+    const websocket = new WebSocket(
+      "wss://quizlingo-backend.herokuapp.com/websocket-answer"
+    );
+
+    websocket.onopen = () => {
+      setStatus("Connection established");
+    };
+
+    websocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+      console.log(data.correct);
+      console.log(data.totalScore);
+      if (data.username == localStorage.getItem("username")) {
+        setScoreP1(data.totalScore);
+        finalScoreP1 = data.totalScore;
+      } else {
+        setScoreP2(data.totalScore);
+        finalScoreP2 = data.totalScore;
+      }
+    };
+
+    return () => {
+      websocket.close();
+    };
+  }, []);
+
+  useEffect(() => {
     updateCount();
 
     return () => clearInterval(timer);
@@ -185,18 +215,18 @@ const Game = () => {
   }, [progress]);
 
   return (
-    <Container>
+    <Container sx={{ display: isLoading ? "none" : "none" }}>
       <Main>
         <Flex align={"center"}>
           <User
-            name="Tom Bola"
+            name={localStorage.getItem("username")}
             variant="P1"
             avatarSrc={users[0].imageURL}
             score={scoreP1}
           ></User>
           <Spacer />
           <User
-            name="Claire Anlage"
+            name={localStorage.getItem("userP2")}
             variant="P2"
             avatarSrc={users[1].imageURL}
             score={scoreP2}
@@ -243,7 +273,6 @@ const Game = () => {
       </Main>
     </Container>
   );
-};
+}
 
-export default Game;
 export { finalScoreP1, finalScoreP2 };
