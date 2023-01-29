@@ -1,44 +1,52 @@
+// Imports
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
   Box,
   Button,
   Container,
   Flex,
-  Heading,
   Menu,
   MenuButton,
   MenuDivider,
   MenuList,
   MenuItem,
-  Spacer,
   Text,
-  Avatar,
-  HStack,
-  Stack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
-import users from "../images/users.json";
 
+// Global variables to be exported
 var userName1 = "";
 var userName2 = "";
 
 export default function Room() {
   const router = useRouter();
-  const [game, setGame] = useState(0);
-  const [showPage, setShowPage] = useState(false);
+  const [sayHello, setSayHello] = useState("");
 
+  // Perform logout
   function logout() {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     router.push("/");
   }
 
-  // const hello = "¡Hola, " + localStorage.getItem("username");
+  // React effects
+  useEffect(() => {
+    // Perform sessionStorage action
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    } else {
+      // Show username on page
+      var userNameWrong = sessionStorage.getItem("username");
+      var userName = userNameWrong.replace(/"/g, "");
+      setSayHello("¡Hola, " + userName + "!");
+    }
+  }, []);
 
   function joinRoom() {
-    console.log("Funktion wird ausgeführt.");
     const websocket = new WebSocket(
       "wss://quizlingo-backend.herokuapp.com/websocket-game"
     );
@@ -46,7 +54,7 @@ export default function Room() {
     websocket.onopen = () => {
       websocket.send(
         JSON.stringify({
-          username: localStorage.getItem("username"),
+          username: sessionStorage.getItem("username"),
           type: "join",
         })
       );
@@ -54,19 +62,16 @@ export default function Room() {
 
     websocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
-      console.log(event.data);
-      console.log(data.canStart);
       if (data.canStart == true) {
         const users = data.players;
-        if (users[0] == localStorage.getItem("username")) {
-          localStorage.setItem("userP2", users[1]);
-          userName1 = users[0];
-          userName2 = users[1];
+        if (users[0] == sessionStorage.getItem("username")) {
+          sessionStorage.setItem("userP2", users[1]);
+          userName1 = users[0].replace(/"/g, "");
+          userName2 = users[1].replace(/"/g, "");
         } else {
-          localStorage.setItem("userP2", users[0]);
-          userName2 = users[0];
-          userName1 = users[1];
+          sessionStorage.setItem("userP2", users[0]);
+          userName2 = users[0].replace(/"/g, "");
+          userName1 = users[1].replace(/"/g, "");
         }
         router.push("/fetch");
       }
@@ -77,42 +82,35 @@ export default function Room() {
     };
   }
 
-  useEffect(() => {
-    // Perform localStorage action
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/fetch");
-    } else {
-      setShowPage(true);
-    }
-  }, []);
-
   return (
     <Container>
-      <Main>
-        <Flex>
-          <Box flex="1">
-            <GradientHeading title="¡Hola!" />
-          </Box>
-          <Menu>
-            <MenuButton as={Button} colorScheme="orange" aria-label="Menu">
-              <HamburgerIcon />
-            </MenuButton>
-            <MenuList>
-              <MenuItem isDisabled>Profil</MenuItem>
-              <MenuItem isDisabled>Einstellungen</MenuItem>
-              <MenuDivider />
-              <MenuItem onClick={() => logout()}>Ausloggen</MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-        <Text color="text">
-          Wähle eine Person aus, gegen die du spielen möchtest.
-        </Text>
-        <Button colorScheme="orange" onClick={() => joinRoom()}>
-          Neues Spiel
-        </Button>
-      </Main>
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Main>
+          <Flex>
+            <Box flex="1">
+              <GradientHeading title={sayHello} />
+            </Box>
+            <Menu>
+              <MenuButton as={Button} colorScheme="orange" aria-label="Menu">
+                <HamburgerIcon />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => logout()}>Ausloggen</MenuItem>
+              </MenuList>
+            </Menu>
+          </Flex>
+          <Text color="text">
+            Wähle eine Person aus, gegen die du spielen möchtest.
+          </Text>
+          <Button colorScheme="orange" onClick={() => joinRoom()}>
+            Neues Spiel
+          </Button>
+        </Main>
+      </motion.div>
     </Container>
   );
 }

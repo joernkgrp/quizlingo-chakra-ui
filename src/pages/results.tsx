@@ -1,3 +1,5 @@
+// Imports
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import {
@@ -12,7 +14,7 @@ import { Main } from "../components/Main";
 import { User } from "../components/User";
 import { GradientHeading } from "../components/GradientHeading";
 import { finalScoreP1, finalScoreP2 } from "./game";
-import users from "../images/users.json"
+import { userName1, userName2 } from "./room";
 
 function GameAssessment() {
   if (finalScoreP1 > finalScoreP2) {
@@ -20,14 +22,21 @@ function GameAssessment() {
   } else if (finalScoreP1 == finalScoreP2) {
     return <Text fontSize="lg">¡Es un empat!</Text>;
   } else if (finalScoreP1 < finalScoreP2) {
-    return (
-      <Text fontSize="lg">¡Has perdido! Lástima.</Text>
-    );
+    return <Text fontSize="lg">¡Has perdido! Lástima.</Text>;
   }
 }
 
 const Results = () => {
   const router = useRouter();
+
+  // React effects
+  useEffect(() => {
+    // Perform sessionStorage action
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    }
+  }, []);
 
   return (
     <Container>
@@ -38,18 +47,18 @@ const Results = () => {
       >
         <Main>
           <GradientHeading fontSize="3xl" title="Spiel beendet" />
-
+          {/* Show results of both users */}
           <HStack>
-            <User name="Tom Bola" score={finalScoreP1} avatarSrc={users[0].imageURL} variant="P1"></User>
+            <User name={userName1} score={finalScoreP1} variant="P1"></User>
             <Spacer />
-            <User name="Claire Anlage" score={finalScoreP2} avatarSrc={users[1].imageURL} variant="P2"></User>
+            <User name={userName2} score={finalScoreP2} variant="P2"></User>
           </HStack>
           <GameAssessment />
 
           <Spacer minH={8} />
 
           <Button
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/room")}
             size="lg"
             variant="solid"
             colorScheme="orange"

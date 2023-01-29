@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// Imports
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import {
@@ -15,11 +16,20 @@ import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 
-const Index = () => {
+export default function Index() {
   const router = useRouter();
+
+  // Check if logged in
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      router.push("/room");
+    }
+  }, []);
 
   return (
     <Container>
+      {/* Page header */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -55,6 +65,7 @@ const Index = () => {
               </Link>
             </ListItem>
           </List>
+
           <Button
             onClick={() => router.push("/login")}
             size="lg"
@@ -65,6 +76,7 @@ const Index = () => {
           >
             Einloggen
           </Button>
+
           <Text align={"center"}>
             Noch kein Quizlingo-User?{" "}
             <Link onClick={() => router.push("/register")} color={"orange.500"}>
@@ -75,5 +87,4 @@ const Index = () => {
       </motion.div>
     </Container>
   );
-};
-export default Index;
+}

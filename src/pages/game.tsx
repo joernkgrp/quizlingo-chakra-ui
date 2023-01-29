@@ -1,3 +1,4 @@
+// Imports
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
@@ -6,7 +7,6 @@ import { User } from "../components/User";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 import theme from "../theme";
-import users from "../images/users.json";
 import { userName1, userName2 } from "./room";
 import { takeQuestions as questions } from "./fetch";
 
@@ -31,6 +31,20 @@ export default function Game() {
   let timer;
   let timer2;
 
+  // React effects
+  useEffect(() => {
+    // Perform sessionStorage action
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      router.push("/");
+    }
+    // Fetch again if question object is empty
+    if (!questions) {
+      router.push("/fetch");
+    }
+  }, []);
+
+  // Function that shows correct answer when time is over
   const updateCount = () => {
     timer =
       !timer &&
@@ -39,6 +53,7 @@ export default function Game() {
       }, answerTime);
   };
 
+  // Function to show progress bar
   const progressBar = () => {
     timer2 =
       !timer2 &&
@@ -48,15 +63,14 @@ export default function Game() {
   };
 
   useEffect(() => {
+    // Websocket connection
     const websocket = new WebSocket(
       "wss://quizlingo-backend.herokuapp.com/websocket-answer"
     );
 
+    // Make assignment from websocket data to scores
     websocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
-      console.log(data.correct);
-      console.log(data.totalScore);
       if (data.username == userName1) {
         setScoreP1(data.totalScore);
         finalScoreP1 = data.totalScore;
@@ -71,6 +85,7 @@ export default function Game() {
     };
   }, []);
 
+  // Update question when time is over
   useEffect(() => {
     updateCount();
 
@@ -103,8 +118,6 @@ export default function Game() {
   // Show correct answer after timeout
   function showCorrectAnswer(delay) {
     var correctOption = questions[activeStep].correctOption;
-    console.log("questions");
-    console.log(questions[activeStep]);
     var correctOptionString = document.getElementById(correctOption.toString());
 
     // correctOptionString.style.backgroundColor = theme.colors.green[500];
@@ -164,19 +177,9 @@ export default function Game() {
     <Container>
       <Main>
         <Flex align={"center"}>
-          <User
-            name={userName1}
-            variant="P1"
-            avatarSrc={users[0].imageURL}
-            score={scoreP1}
-          ></User>
+          <User name={userName1} variant="P1" score={scoreP1}></User>
           <Spacer />
-          <User
-            name={userName2}
-            variant="P2"
-            avatarSrc={users[1].imageURL}
-            score={scoreP2}
-          ></User>
+          <User name={userName2} variant="P2" score={scoreP2}></User>
         </Flex>
 
         <div className="wrapper">
@@ -207,7 +210,6 @@ export default function Game() {
               borderRadius="lg"
               p={3}
               id={optionIndex.toString()}
-              /** _hover={{ bg: "gray.300" }} **/
               onClick={() => checkResponse(optionIndex)}
               cursor="pointer"
               transition="0.25s ease-out"
