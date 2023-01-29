@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+
+var takeQuestions = [];
 
 export default function Profile() {
   const [questions, setQuestions] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
+  const router = useRouter(); // Go to next page
+
+  function checkResponse() {
+    console.log(questions[0].id);
+  }
 
   const options = {
     method: "GET", // GET because sending data
@@ -22,16 +30,27 @@ export default function Profile() {
       .then((data) => {
         setQuestions(data);
         setLoading(false);
+        console.log("Bin bei Fetch");
       });
   }, []);
 
   if (isLoading) return <p>Loading...</p>;
   if (!questions) return <p>No profile data</p>;
 
+  if (isLoading == false) {
+    takeQuestions = questions;
+
+    console.log(takeQuestions);
+    router.push("/game");
+  }
+
   return (
     <div>
       <h1>{questions[0].id}</h1>
+      <button onClick={() => checkResponse()}>Hallo</button>
       <p>{questions[0].taskText}</p>
     </div>
   );
 }
+
+export { takeQuestions };

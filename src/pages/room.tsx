@@ -22,6 +22,9 @@ import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 import users from "../images/users.json";
 
+var userName1 = "";
+var userName2 = "";
+
 export default function Room() {
   const router = useRouter();
   const [game, setGame] = useState(0);
@@ -58,10 +61,14 @@ export default function Room() {
         const users = data.players;
         if (users[0] == localStorage.getItem("username")) {
           localStorage.setItem("userP2", users[1]);
+          userName1 = users[0];
+          userName2 = users[1];
         } else {
           localStorage.setItem("userP2", users[0]);
+          userName2 = users[0];
+          userName1 = users[1];
         }
-        router.push("/game");
+        router.push("/fetch");
       }
     };
 
@@ -74,15 +81,11 @@ export default function Room() {
     // Perform localStorage action
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/login");
+      router.push("/fetch");
     } else {
       setShowPage(true);
     }
   }, []);
-
-  setTimeout(() => {
-    setGame(1);
-  }, 10000);
 
   return (
     <Container>
@@ -113,3 +116,5 @@ export default function Room() {
     </Container>
   );
 }
+
+export { userName1, userName2 };

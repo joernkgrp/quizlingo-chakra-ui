@@ -1,73 +1,87 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import {
-  Box,
-  Container,
-  Flex,
-  Spacer,
-  Stack,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Container, Flex, Spacer, Stack, Text } from "@chakra-ui/react";
 import { User } from "../components/User";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
-//import { questions } from "../data/questions";
 import theme from "../theme";
 import users from "../images/users.json";
+import { userName1, userName2 } from "./room";
+import { takeQuestions as questions } from "./fetch";
 
 // Global variables to be exported
 var finalScoreP1 = 0;
 var finalScoreP2 = 0;
 
 export default function Game() {
+  const router = useRouter(); // Go to next page
   const answerTime = 10000;
   const delay = 1000;
   const initialProgress = 100;
   const timerRefresh = 1000;
 
-  const router = useRouter(); // Go to next page
-  const toast = useToast(); // Define toast
-
-  const [questions, setQuestions] = useState(null);
-  const [isLoading, setLoading] = useState(false);
-
   // Define React hooks
-  var [activeStep, setActiveStep] = React.useState(0);
+  var [activeStep, setActiveStep] = useState(0);
   var [scoreP1, setScoreP1] = useState(0);
   var [scoreP2, setScoreP2] = useState(0);
-  var [comInt, setComInt] = useState(0);
   var [progress, setProgress] = useState(initialProgress);
-  const [userName, setUserName] = useState("");
-  const [status, setStatus] = useState("");
 
-  const endpoint = "https://quizlingo-backend.herokuapp.com/questions";
+  // Set timer to 10 sec
+  let timer;
+  let timer2;
 
-  const options = {
-    method: "GET", // GET because sending data
-    headers: {
-      "Content-Type": "application/json", // Inform server we send a JSON
-      Authorization:
-        "Bearer " + localStorage.getItem("token").replace(/['"]+/g, ""),
-      Accept: "*/*",
-    },
+  const updateCount = () => {
+    timer =
+      !timer &&
+      setInterval(() => {
+        showCorrectAnswer(delay);
+      }, answerTime);
+  };
+
+  const progressBar = () => {
+    timer2 =
+      !timer2 &&
+      setInterval(() => {
+        setProgress((progress) => progress - answerTime / timerRefresh - 1);
+      }, timerRefresh);
   };
 
   useEffect(() => {
-    setLoading(true);
-    fetch(endpoint, options)
-      .then((res) => res.json())
-      .then((data) => {
-        setQuestions(data);
-        setLoading(false);
-      });
+    const websocket = new WebSocket(
+      "wss://quizlingo-backend.herokuapp.com/websocket-answer"
+    );
+
+    websocket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+      console.log(data.correct);
+      console.log(data.totalScore);
+      if (data.username == userName1) {
+        setScoreP1(data.totalScore);
+        finalScoreP1 = data.totalScore;
+      } else {
+        setScoreP2(data.totalScore);
+        finalScoreP2 = data.totalScore;
+      }
+    };
+
+    return () => {
+      websocket.close();
+    };
   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (!questions) return <p>No profile data</p>;
+  useEffect(() => {
+    updateCount();
 
-  var maxSteps = questions.length; // Number of questions
+    return () => clearInterval(timer);
+  }, [activeStep]);
+
+  useEffect(() => {
+    progressBar();
+
+    return () => clearInterval(timer2);
+  }, [progress]);
 
   // Go to next question
   function handleNext(delay) {
@@ -84,23 +98,15 @@ export default function Game() {
     }, delay);
   }
 
-  // Toast definition
-  function toastTimeout() {
-    toast({
-      position: "bottom",
-      title: "Deine Gegnerin hat geantwortet.",
-      status: "warning",
-      duration: delay,
-      isClosable: false,
-    });
-  }
+  var maxSteps = questions.length; // Number of questions
 
   // Show correct answer after timeout
   function showCorrectAnswer(delay) {
     var correctOption = questions[activeStep].correctOption;
+    console.log("questions");
+    console.log(questions[activeStep]);
     var correctOptionString = document.getElementById(correctOption.toString());
 
-    toastTimeout();
     // correctOptionString.style.backgroundColor = theme.colors.green[500];
     // correctOptionString.style.color = theme.colors.white;
 
@@ -122,7 +128,7 @@ export default function Game() {
     setTimeout(() => {
       websocket.send(
         JSON.stringify({
-          username: localStorage.getItem("username"),
+          username: userName1,
           selectedAnswer: clickedOption,
           questionId: questions[activeStep].id,
           currentScore: scoreP1,
@@ -154,79 +160,19 @@ export default function Game() {
     }
   }
 
-  // Set timer to 10 sec
-  let timer;
-  let timer2;
-
-  const updateCount = () => {
-    timer =
-      !timer &&
-      setInterval(() => {
-        showCorrectAnswer(delay);
-      }, answerTime);
-  };
-
-  const progressBar = () => {
-    timer2 =
-      !timer2 &&
-      setInterval(() => {
-        setProgress((progress) => progress - answerTime / timerRefresh - 1);
-      }, timerRefresh);
-  };
-
-  useEffect(() => {
-    const websocket = new WebSocket(
-      "wss://quizlingo-backend.herokuapp.com/websocket-answer"
-    );
-
-    websocket.onopen = () => {
-      setStatus("Connection established");
-    };
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log(data);
-      console.log(data.correct);
-      console.log(data.totalScore);
-      if (data.username == localStorage.getItem("username")) {
-        setScoreP1(data.totalScore);
-        finalScoreP1 = data.totalScore;
-      } else {
-        setScoreP2(data.totalScore);
-        finalScoreP2 = data.totalScore;
-      }
-    };
-
-    return () => {
-      websocket.close();
-    };
-  }, []);
-
-  useEffect(() => {
-    updateCount();
-
-    return () => clearInterval(timer);
-  }, [activeStep]);
-
-  useEffect(() => {
-    progressBar();
-
-    return () => clearInterval(timer2);
-  }, [progress]);
-
   return (
-    <Container sx={{ display: isLoading ? "none" : "none" }}>
+    <Container>
       <Main>
         <Flex align={"center"}>
           <User
-            name={localStorage.getItem("username")}
+            name={userName1}
             variant="P1"
             avatarSrc={users[0].imageURL}
             score={scoreP1}
           ></User>
           <Spacer />
           <User
-            name={localStorage.getItem("userP2")}
+            name={userName2}
             variant="P2"
             avatarSrc={users[1].imageURL}
             score={scoreP2}
