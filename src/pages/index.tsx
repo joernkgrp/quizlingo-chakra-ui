@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { motion, useAnimationControls } from "framer-motion";
-
+import { useRouter } from "next/router";
+import { motion } from "framer-motion";
 import {
   Button,
-  Box,
-  Link as ChakraLink,
+  Link,
   Container,
-  Heading,
   Text,
   Code,
   List,
@@ -14,7 +12,6 @@ import {
   ListItem,
 } from "@chakra-ui/react";
 import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
-import { useRouter } from "next/router";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 
@@ -34,32 +31,22 @@ const Index = () => {
 
           <Text color="text">
             Spanisch lernen im spielerischen Duell mit <br />
-            <Code>Next.js</Code> + <Code>chakra-ui</Code> +{" "}
+            <Code>Next.js</Code> + <Code>Chakra UI</Code> +{" "}
             <Code>TypeScript</Code>.
           </Text>
 
           <List spacing={3} my={0} color="text">
             <ListItem>
               <ListIcon as={CheckCircleIcon} color="green.500" />
-              <ChakraLink
-                isExternal
-                href="https://chakra-ui.com"
-                flexGrow={1}
-                mr={2}
-              >
+              <Link isExternal href="https://chakra-ui.com" flexGrow={1} mr={2}>
                 Chakra UI <LinkIcon />
-              </ChakraLink>
+              </Link>
             </ListItem>
             <ListItem>
               <ListIcon as={CheckCircleIcon} color="green.500" />
-              <ChakraLink
-                isExternal
-                href="https://nextjs.org"
-                flexGrow={1}
-                mr={2}
-              >
+              <Link isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
                 Next.js <LinkIcon />
-              </ChakraLink>
+              </Link>
             </ListItem>
           </List>
           <Button
@@ -70,8 +57,14 @@ const Index = () => {
             rounded="button"
             width="full"
           >
-            Spiel starten
+            Einloggen
           </Button>
+          <Text align={"center"}>
+            Noch kein Quizlingo-User?{" "}
+            <Link onClick={() => router.push("/register")} color={"orange.500"}>
+              Registrieren
+            </Link>
+          </Text>
         </Main>
       </motion.div>
     </Container>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import { Field, Form, Formik } from "formik";
 import {
@@ -10,12 +10,14 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  ListItem,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalFooter,
   ModalBody,
+  UnorderedList,
   Stack,
   Text,
   useDisclosure,
@@ -23,8 +25,6 @@ import {
 import { GradientHeading } from "../components/GradientHeading";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Main } from "../components/Main";
-
-// Define error messages
 
 // Validate username
 function validateUserName(value) {
@@ -37,22 +37,38 @@ function validateUserName(value) {
   return error;
 }
 
-// Validate password: only if exists and length
-function validatePassword(value) {
+// Validate name
+function validateName(value) {
   let error;
   if (!value) {
-    error = "Bitte gib dein Passwort ein.";
-  } else if (value.length < 8) {
-    error = "Das Passwort hat mindestens 8 Zeichen.";
+    error = "Bitte gib deinen Vornamen ein.";
+  } else if (!/^[A-Z]{2,20}$/i.test(value)) {
+    error = "Bitte gib einen gültigen Vornamen ein.";
   }
   return error;
 }
 
-export default function SignupForm() {
+// Validate password: criteria see list component
+function validatePassword(value) {
+  let error;
+  if (!value) {
+    error = "Bitte gib ein Passwort ein.";
+  } else if (
+    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i.test(
+      value
+    )
+  ) {
+    error = "Bitte gib ein gültiges Passwort ein.";
+  }
+  return error;
+}
+
+export default function RegisterForm() {
   // Constants
   const router = useRouter(); // Use router to go to next page
   const { onClose } = useDisclosure(); // Close modal
   const [showErrorModal, setShowErrorModal] = React.useState(false); // State to open error modal
+  const [showSuccessModal, setShowSuccessModal] = React.useState(false); // State to open success modal
 
   // Password show and hide
   const [show, setShow] = React.useState(false);
@@ -62,14 +78,19 @@ export default function SignupForm() {
     <Container>
       <Main>
         <Stack align={"left"}>
-          <GradientHeading fontSize="4xl" title="Anmelden" />
+          <GradientHeading fontSize="4xl" title="Registrieren" />
           <Text fontSize={"lg"} color={"gray.600"}>
-            Melde dich jetzt an, um ein neues Spiel zu starten.
+            Erstelle jetzt ein Konto, um ein Spanisch-Quiz zu starten!
           </Text>
         </Stack>
 
         <Formik
-          initialValues={{ username: "", password: "" }}
+          initialValues={{
+            name: "",
+            username: "",
+            password: "",
+            imageURL: null,
+          }}
           // Execute submit actions
           onSubmit={async (values, actions) => {
             // Make JSON object from data
@@ -79,8 +100,7 @@ export default function SignupForm() {
             actions.setSubmitting(false);
 
             // REST endpoint
-            const endpoint =
-              "https://quizlingo-backend.herokuapp.com/authenticate";
+            const endpoint = "https://quizlingo-backend.herokuapp.com/register";
 
             // Build request to send data to endpoint
             const options = {
@@ -94,12 +114,10 @@ export default function SignupForm() {
             // Send form data to REST API and get a response
             const response = await fetch(endpoint, options);
 
-            // Check if login data correct
+            // Check if user alredy exists
             if (response.status == 200) {
-              // Store token globally
-
-              // Redirect to room page
-              router.push("/room");
+              // Open success modal if code equals 200 (new user can be created)
+              setShowSuccessModal(true);
             } else {
               // Else open error modal (any other response code)
               setShowErrorModal(true);
@@ -109,10 +127,31 @@ export default function SignupForm() {
           {(props) => (
             <Form>
               <Stack spacing={6}>
+                <Field name="name" validate={validateName}>
+                  {({ field, form }) => (
+                    <FormControl
+                      isRequired
+                      // Check if input has errors and is touched
+                      isInvalid={form.errors.name && form.touched.name}
+                    >
+                      <FormLabel>Vorname</FormLabel>
+                      <Input
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder="Max"
+                        {...field}
+                      />
+                      <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                    </FormControl>
+                  )}
+                </Field>
+
                 <Field name="username" validate={validateUserName}>
                   {({ field, form }) => (
                     <FormControl
                       isRequired
+                      // Check if input has errors and is touched
                       isInvalid={form.errors.username && form.touched.username}
                     >
                       <FormLabel>Benutzername</FormLabel>
@@ -123,7 +162,15 @@ export default function SignupForm() {
                         placeholder="maxmustermann"
                         {...field}
                       />
-                      <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                      <FormErrorMessage>
+                        {form.errors.username}
+                      </FormErrorMessage>
+                      <UnorderedList spacing={2} mt={4}>
+                        <ListItem>Mindestens 3, maximal 20 Zeichen</ListItem>
+                        <ListItem>
+                          Keine Sonderzeichen, außer <Text as="samp">._</Text>
+                        </ListItem>
+                      </UnorderedList>
                     </FormControl>
                   )}
                 </Field>
@@ -132,6 +179,7 @@ export default function SignupForm() {
                   {({ field, form }) => (
                     <FormControl
                       isRequired
+                      // Check if input has errors and is touched
                       isInvalid={form.errors.password && form.touched.password}
                     >
                       <FormLabel>Passwort</FormLabel>
@@ -144,7 +192,7 @@ export default function SignupForm() {
                           placeholder="••••••••••••••••"
                           {...field}
                         />
-                        <InputRightElement width="rem">
+                        <InputRightElement>
                           <Button variant="link" onClick={handleClick}>
                             {show ? <ViewOffIcon /> : <ViewIcon />}
                           </Button>
@@ -153,6 +201,13 @@ export default function SignupForm() {
                       <FormErrorMessage>
                         {form.errors.password}
                       </FormErrorMessage>
+                      <UnorderedList spacing={2} my={4}>
+                        <ListItem>Mindestens 8 Zeichen</ListItem>
+                        <ListItem>
+                          Mindestens 1 Großbuchstabe, 1 Kleinbuchstabe, 1
+                          Sonderzeichen <Text as="samp">@$!%*?&</Text>
+                        </ListItem>
+                      </UnorderedList>
                     </FormControl>
                   )}
                 </Field>
@@ -178,28 +233,49 @@ export default function SignupForm() {
       <Modal isOpen={showErrorModal} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Login fehlgeschlagen</ModalHeader>
+          <ModalHeader>Registrierung fehlgeschlagen</ModalHeader>
           <ModalBody>
             <Stack spacing={3}>
               <Text>
-                Deine eingegeben Daten sind nicht korrekt. Oder musst du dich
-                erst registrieren?
+                Der Benutzername ist bereits vorhanden, oder es ist ein
+                technischer Fehler aufgetreten.
               </Text>
-              <Text>Versuche es noch einmal.</Text>
+              <Text>
+                Verwende einen anderen Benutzernamen oder versuche es später
+                noch einmal.
+              </Text>
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Stack direction="row" spacing={2}>
-              <Button variant="ghost" onClick={() => router.push("/register")}>
-                Registrieren
-              </Button>
-              <Button
-                colorScheme="orange"
-                onClick={() => setShowErrorModal(false)}
-              >
-                Schließen
-              </Button>
+            <Button
+              colorScheme="orange"
+              mr={0}
+              onClick={() => setShowErrorModal(false)}
+            >
+              Schließen
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={showSuccessModal} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Registrierung erfolgreich</ModalHeader>
+          <ModalBody>
+            <Stack spacing={3}>
+              <Text>Dein Konto bei Quizlingo wurde hinzugefügt!</Text>
+              <Text>Du kannst dich jetzt einloggen.</Text>
             </Stack>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="orange"
+              mr={0}
+              onClick={() => router.push("/")}
+            >
+              Einloggen
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
