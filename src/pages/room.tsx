@@ -25,6 +25,7 @@ var userName2 = "";
 export default function Room() {
   const router = useRouter();
   const [sayHello, setSayHello] = useState("");
+  const [waiting, setWaiting] = useState("");
 
   // Perform logout
   function logout() {
@@ -47,6 +48,7 @@ export default function Room() {
   }, []);
 
   function joinRoom() {
+    setWaiting("Du wirst gleich mit einem Spieler verbunden …");
     const websocket = new WebSocket(
       "wss://quizlingo-backend.herokuapp.com/websocket-game"
     );
@@ -106,9 +108,14 @@ export default function Room() {
           <Text color="text">
             Wähle eine Person aus, gegen die du spielen möchtest.
           </Text>
-          <Button colorScheme="orange" onClick={() => joinRoom()}>
+          <Button
+            colorScheme="orange"
+            onClick={() => joinRoom()}
+            isLoading={waiting ? true : false}
+          >
             Neues Spiel
           </Button>
+          <Text>{waiting}</Text>
         </Main>
       </motion.div>
     </Container>
