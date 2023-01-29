@@ -16,7 +16,7 @@ import { questions } from "../data/questions";
 import { Main } from "../components/Main";
 import { GradientHeading } from "../components/GradientHeading";
 import theme from "../theme";
-import users from "../images/users.json"
+import users from "../images/users.json";
 
 // Global variables to be exported
 var finalScoreP1 = 0;
@@ -40,18 +40,40 @@ const Game = () => {
   var [comInt, setComInt] = useState(0);
   var [progress, setProgress] = useState(initialProgress);
 
+  const endpoint = "https://quizlingo-backend.herokuapp.com/questions";
+
+  const options = {
+    method: "GET", // GET because sending data
+    headers: {
+      "Content-Type": "application/json", // Inform server we send a JSON
+      Authorization:
+        "Bearer " + localStorage.getItem("token").replace(/['"]+/g, ""),
+      Accept: "*/*",
+    },
+  };
+
+  console.log(options);
+
+  useEffect(() => {
+    fetch(endpoint, options)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Hi");
+        console.log(data);
+      });
+  }, []);
+
   function getRandomInt() {
     var randomInt = Math.random();
     if (randomInt < 0.5) {
-      randomInt = 0
+      randomInt = 0;
     } else {
-      randomInt = 1
+      randomInt = 1;
     }
     setComInt(randomInt);
     console.log(comInt);
-    return randomInt
+    return randomInt;
   }
-
 
   // Go to next question
   function handleNext(delay) {
@@ -87,7 +109,7 @@ const Game = () => {
     var correctOptionString = document.getElementById(correctOption.toString());
 
     // Give computer points
-    setScoreP2((scoreP2 += getRandomInt()))
+    setScoreP2((scoreP2 += getRandomInt()));
 
     toastTimeout();
     // correctOptionString.style.backgroundColor = theme.colors.green[500];
@@ -166,9 +188,19 @@ const Game = () => {
     <Container>
       <Main>
         <Flex align={"center"}>
-          <User name="Tom Bola" variant="P1" avatarSrc={users[0].imageURL} score={scoreP1}></User>
+          <User
+            name="Tom Bola"
+            variant="P1"
+            avatarSrc={users[0].imageURL}
+            score={scoreP1}
+          ></User>
           <Spacer />
-          <User name="Claire Anlage" variant="P2" avatarSrc={users[1].imageURL} score={scoreP2}></User>
+          <User
+            name="Claire Anlage"
+            variant="P2"
+            avatarSrc={users[1].imageURL}
+            score={scoreP2}
+          ></User>
         </Flex>
 
         <div className="wrapper">

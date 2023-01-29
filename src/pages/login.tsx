@@ -97,6 +97,9 @@ export default function SignupForm() {
             // Check if login data correct
             if (response.status == 200) {
               // Store token globally
+              const result = await response.json();
+              localStorage.setItem("token", JSON.stringify(result.token));
+              localStorage.setItem("username", JSON.stringify(values.username));
 
               // Redirect to room page
               router.push("/room");
